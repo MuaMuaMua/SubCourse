@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AccountSettingVC">
+            <connections>
+                <outlet property="_tableView" destination="64V-Ey-QWV" id="903-7B-luk"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="64V-Ey-QWV">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="627"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BTq-95-Bai">
+                    <rect key="frame" x="166" y="632" width="42" height="30"/>
+                    <state key="normal" title="DONE">
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="doneAction:" destination="-1" eventType="touchUpInside" id="jb7-0Y-ZJv"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="64V-Ey-QWV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="N9S-gk-QPr"/>
+                <constraint firstAttribute="bottom" secondItem="BTq-95-Bai" secondAttribute="bottom" constant="5" id="TEl-hM-soq"/>
+                <constraint firstItem="64V-Ey-QWV" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="UnO-A1-6hG"/>
+                <constraint firstAttribute="bottom" secondItem="64V-Ey-QWV" secondAttribute="bottom" constant="40" id="enS-Vo-zui"/>
+                <constraint firstAttribute="trailing" secondItem="64V-Ey-QWV" secondAttribute="trailing" id="gyv-F2-aeD"/>
+                <constraint firstItem="BTq-95-Bai" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="tpl-Ya-mSr"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+            <point key="canvasLocation" x="402.5" y="346.5"/>
+        </view>
+    </objects>
+</document>

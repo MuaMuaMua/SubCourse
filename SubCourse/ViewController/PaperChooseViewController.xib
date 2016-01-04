@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PaperChooseViewController">
+            <connections>
+                <outlet property="_navigationItem" destination="Pt7-20-6aX" id="mDL-bV-iQb"/>
+                <outlet property="_tableView" destination="PRI-Jj-r9A" id="UGS-63-gRb"/>
+                <outlet property="continueBtn" destination="0sg-un-j50" id="Wa1-vo-SbF"/>
+                <outlet property="navaigationBar" destination="wKP-11-zpH" id="7hx-qV-YJJ"/>
+                <outlet property="titleLabel" destination="wKP-11-zpH" id="ayS-9M-S60"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <navigationBar contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wKP-11-zpH">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="KSn-b3-wg8"/>
+                    </constraints>
+                    <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <items>
+                        <navigationItem title="Title" prompt="" id="Pt7-20-6aX">
+                            <leftBarButtonItems>
+                                <barButtonItem image="whiteBackIcon" id="rSX-jy-7fb"/>
+                                <barButtonItem title="繼續閱讀" id="0sg-un-j50">
+                                    <color key="tintColor" red="0.90388838370891256" green="0.92796750420099294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <connections>
+                                        <action selector="clickBack:" destination="-1" id="KBF-ui-RhO"/>
+                                    </connections>
+                                </barButtonItem>
+                            </leftBarButtonItems>
+                            <barButtonItem key="rightBarButtonItem" title="Item" id="1GU-rD-l47"/>
+                        </navigationItem>
+                    </items>
+                </navigationBar>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="PRI-Jj-r9A">
+                    <rect key="frame" x="0.0" y="64" width="375" height="559"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="PRI-Jj-r9A" firstAttribute="top" secondItem="wKP-11-zpH" secondAttribute="bottom" id="6vW-x9-Xca"/>
+                <constraint firstAttribute="trailing" secondItem="wKP-11-zpH" secondAttribute="trailing" id="MrZ-Fp-TOp"/>
+                <constraint firstItem="PRI-Jj-r9A" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="QGP-fJ-jKN"/>
+                <constraint firstItem="wKP-11-zpH" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="RZM-20-QiG"/>
+                <constraint firstAttribute="trailing" secondItem="PRI-Jj-r9A" secondAttribute="trailing" id="cpl-pm-vBu"/>
+                <constraint firstAttribute="bottom" secondItem="PRI-Jj-r9A" secondAttribute="bottom" constant="44" id="ncd-EO-SRP"/>
+                <constraint firstItem="wKP-11-zpH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="oIP-i2-kgE"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+            <point key="canvasLocation" x="645.5" y="125.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="whiteBackIcon" width="11" height="18"/>
+    </resources>
+</document>

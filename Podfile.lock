@@ -1,0 +1,69 @@
+PODS:
+  - AFNetworking (2.6.3):
+    - AFNetworking/NSURLConnection (= 2.6.3)
+    - AFNetworking/NSURLSession (= 2.6.3)
+    - AFNetworking/Reachability (= 2.6.3)
+    - AFNetworking/Security (= 2.6.3)
+    - AFNetworking/Serialization (= 2.6.3)
+    - AFNetworking/UIKit (= 2.6.3)
+  - AFNetworking/NSURLConnection (2.6.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.6.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.6.3)
+  - AFNetworking/Security (2.6.3)
+  - AFNetworking/Serialization (2.6.3)
+  - AFNetworking/UIKit (2.6.3):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - ASIHTTPRequest (1.8.2):
+    - ASIHTTPRequest/ASIWebPageRequest (= 1.8.2)
+    - ASIHTTPRequest/CloudFiles (= 1.8.2)
+    - ASIHTTPRequest/Core (= 1.8.2)
+    - ASIHTTPRequest/S3 (= 1.8.2)
+  - ASIHTTPRequest/ASIWebPageRequest (1.8.2):
+    - ASIHTTPRequest/Core
+  - ASIHTTPRequest/CloudFiles (1.8.2):
+    - ASIHTTPRequest/Core
+  - ASIHTTPRequest/Core (1.8.2):
+    - Reachability
+  - ASIHTTPRequest/S3 (1.8.2):
+    - ASIHTTPRequest/Core
+  - GPUImage (0.1.7)
+  - HappyDNS (0.2.3)
+  - IQKeyboardManager (3.3.4)
+  - JSONKit (1.5pre)
+  - MJRefresh (2.4.12)
+  - Qiniu (7.0.16):
+    - AFNetworking (~> 2.0)
+    - HappyDNS (~> 0.2)
+  - Reachability (3.2)
+  - UMengAnalytics-NO-IDFA (3.6.7)
+
+DEPENDENCIES:
+  - AFNetworking (~> 2.6.0)
+  - ASIHTTPRequest (~> 1.8.2)
+  - GPUImage
+  - IQKeyboardManager (~> 3.3.1)
+  - JSONKit (~> 1.5pre)
+  - MJRefresh (~> 2.4.10)
+  - Qiniu (~> 7.0)
+  - UMengAnalytics-NO-IDFA
+
+SPEC CHECKSUMS:
+  AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  ASIHTTPRequest: ec013992946676b7978dcbde6396d57312d21db4
+  GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
+  HappyDNS: 6d85942e64c28b4fa61f8c76580398f52d6d1d11
+  IQKeyboardManager: ac803e61e5b50efae6b3aeedd95a02c7c7d3b2b3
+  JSONKit: bae313ce6a6c444f40489a6c0b023f399888871f
+  MJRefresh: ca8e9589895977df32d379d46e6b8a5450b3ff44
+  Qiniu: 51a8702cddc02b50867e10cef99291b9a8a006b1
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  UMengAnalytics-NO-IDFA: 6d02561a00579b2e37718f204eb81347df5d7b8b
+
+COCOAPODS: 0.39.0
