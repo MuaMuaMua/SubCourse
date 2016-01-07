@@ -64,8 +64,6 @@
 		609727871C0C5D9A003396CE /* SCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 609727851C0C5D9A003396CE /* SCAccount.m */; };
 		609727911C0C5DA5003396CE /* PersonalCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 609727891C0C5DA5003396CE /* PersonalCell.xib */; };
 		609727921C0C5DA5003396CE /* PersonalCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097278A1C0C5DA5003396CE /* PersonalCell.m */; };
-		609727931C0C5DA5003396CE /* SourceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6097278B1C0C5DA5003396CE /* SourceCell.xib */; };
-		609727941C0C5DA5003396CE /* SourceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097278D1C0C5DA5003396CE /* SourceCell.m */; };
 		609727951C0C5DA5003396CE /* SlideViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6097278E1C0C5DA5003396CE /* SlideViewCell.xib */; };
 		609727961C0C5DA5003396CE /* SlideViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097278F1C0C5DA5003396CE /* SlideViewCell.m */; };
 		609727B51C0D4622003396CE /* zbar-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 609727991C0D4622003396CE /* zbar-back.png */; };
@@ -96,6 +94,8 @@
 		60A920331C34FC4100150209 /* UpdatePersonalInfo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60A920311C34FC4100150209 /* UpdatePersonalInfo.xib */; };
 		60A920371C34FF1600150209 /* UpdateInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 60A920351C34FF1600150209 /* UpdateInfoCell.m */; };
 		60A920381C34FF1600150209 /* UpdateInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60A920361C34FF1600150209 /* UpdateInfoCell.xib */; };
+		60B2305D1C3CE1CF000C699F /* SourceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 60B2305B1C3CE1CF000C699F /* SourceCell.m */; };
+		60B2305E1C3CE1CF000C699F /* SourceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60B2305C1C3CE1CF000C699F /* SourceCell.xib */; };
 		60B8A6441C102822006B892F /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60B8A6421C102822006B892F /* TestViewController.m */; };
 		60B8A6451C102822006B892F /* TestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60B8A6431C102822006B892F /* TestViewController.xib */; };
 		60C427261C075B0100AF4638 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C427251C075B0100AF4638 /* main.m */; };
@@ -254,9 +254,6 @@
 		609727881C0C5DA5003396CE /* PersonalCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PersonalCell.h; path = Cell/PersonalCell.h; sourceTree = "<group>"; };
 		609727891C0C5DA5003396CE /* PersonalCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PersonalCell.xib; path = Cell/PersonalCell.xib; sourceTree = "<group>"; };
 		6097278A1C0C5DA5003396CE /* PersonalCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PersonalCell.m; path = Cell/PersonalCell.m; sourceTree = "<group>"; };
-		6097278B1C0C5DA5003396CE /* SourceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SourceCell.xib; path = Cell/SourceCell.xib; sourceTree = "<group>"; };
-		6097278C1C0C5DA5003396CE /* SourceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SourceCell.h; path = Cell/SourceCell.h; sourceTree = "<group>"; };
-		6097278D1C0C5DA5003396CE /* SourceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SourceCell.m; path = Cell/SourceCell.m; sourceTree = "<group>"; };
 		6097278E1C0C5DA5003396CE /* SlideViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SlideViewCell.xib; path = Cell/SlideViewCell.xib; sourceTree = "<group>"; };
 		6097278F1C0C5DA5003396CE /* SlideViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlideViewCell.m; path = Cell/SlideViewCell.m; sourceTree = "<group>"; };
 		609727901C0C5DA5003396CE /* SlideViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlideViewCell.h; path = Cell/SlideViewCell.h; sourceTree = "<group>"; };
@@ -319,6 +316,9 @@
 		60A920341C34FF1600150209 /* UpdateInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpdateInfoCell.h; path = Cell/UpdateInfoCell.h; sourceTree = "<group>"; };
 		60A920351C34FF1600150209 /* UpdateInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpdateInfoCell.m; path = Cell/UpdateInfoCell.m; sourceTree = "<group>"; };
 		60A920361C34FF1600150209 /* UpdateInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UpdateInfoCell.xib; path = Cell/UpdateInfoCell.xib; sourceTree = "<group>"; };
+		60B2305A1C3CE1CF000C699F /* SourceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SourceCell.h; path = Cell/SourceCell.h; sourceTree = "<group>"; };
+		60B2305B1C3CE1CF000C699F /* SourceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SourceCell.m; path = Cell/SourceCell.m; sourceTree = "<group>"; };
+		60B2305C1C3CE1CF000C699F /* SourceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SourceCell.xib; path = Cell/SourceCell.xib; sourceTree = "<group>"; };
 		60B8A6411C102822006B892F /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestViewController.h; path = ViewController/TestViewController.h; sourceTree = "<group>"; };
 		60B8A6421C102822006B892F /* TestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestViewController.m; path = ViewController/TestViewController.m; sourceTree = "<group>"; };
 		60B8A6431C102822006B892F /* TestViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TestViewController.xib; path = ViewController/TestViewController.xib; sourceTree = "<group>"; };
@@ -803,9 +803,6 @@
 				609727881C0C5DA5003396CE /* PersonalCell.h */,
 				6097278A1C0C5DA5003396CE /* PersonalCell.m */,
 				609727891C0C5DA5003396CE /* PersonalCell.xib */,
-				6097278C1C0C5DA5003396CE /* SourceCell.h */,
-				6097278D1C0C5DA5003396CE /* SourceCell.m */,
-				6097278B1C0C5DA5003396CE /* SourceCell.xib */,
 				6097278F1C0C5DA5003396CE /* SlideViewCell.m */,
 				609727901C0C5DA5003396CE /* SlideViewCell.h */,
 				6097278E1C0C5DA5003396CE /* SlideViewCell.xib */,
@@ -833,6 +830,9 @@
 				60845C131C3761BF001B3A3A /* PersonalAvatarCell.h */,
 				60845C141C3761BF001B3A3A /* PersonalAvatarCell.m */,
 				60845C151C3761BF001B3A3A /* PersonalAvatarCell.xib */,
+				60B2305A1C3CE1CF000C699F /* SourceCell.h */,
+				60B2305B1C3CE1CF000C699F /* SourceCell.m */,
+				60B2305C1C3CE1CF000C699F /* SourceCell.xib */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -962,7 +962,7 @@
 				TargetAttributes = {
 					60C427201C075B0100AF4638 = {
 						CreatedOnToolsVersion = 7.1.1;
-						DevelopmentTeam = 69G8U5L6U4;
+						DevelopmentTeam = RLC7LWNPRQ;
 					};
 					60C427391C075B0100AF4638 = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -1002,6 +1002,7 @@
 				6097277B1C0C5D89003396CE /* PasswordSettingControllerViewController.xib in Resources */,
 				604D28D61C362D080082EA6A /* InfoCell.xib in Resources */,
 				60C4276D1C075E4500AF4638 /* goForwardItem@2x.png in Resources */,
+				60B2305E1C3CE1CF000C699F /* SourceCell.xib in Resources */,
 				606622D71C3166A2003817CE /* AccountSettingCell.xib in Resources */,
 				60E0CB891C2915ED00314760 /* SCPageViewController.xib in Resources */,
 				60C4276C1C075E4500AF4638 /* goForwardItem.png in Resources */,
@@ -1013,7 +1014,6 @@
 				6097277C1C0C5D89003396CE /* PersonalInfo.xib in Resources */,
 				60A920331C34FC4100150209 /* UpdatePersonalInfo.xib in Resources */,
 				60C427B01C07E9F700AF4638 /* SafetySettingController.xib in Resources */,
-				609727931C0C5DA5003396CE /* SourceCell.xib in Resources */,
 				60C427311C075B0100AF4638 /* Assets.xcassets in Resources */,
 				60A920381C34FF1600150209 /* UpdateInfoCell.xib in Resources */,
 				609727801C0C5D89003396CE /* MyFavouriteController.xib in Resources */,
@@ -1122,6 +1122,7 @@
 				604D28D51C362D080082EA6A /* InfoCell.m in Sources */,
 				609727CA1C0D4B71003396CE /* MBProgressHUD+MJ.m in Sources */,
 				6000D8271C253EB100AFAD3F /* UIImageView+HighlightedWebCache.m in Sources */,
+				60B2305D1C3CE1CF000C699F /* SourceCell.m in Sources */,
 				609727781C0C5D89003396CE /* PasswordSettingControllerViewController.m in Sources */,
 				6000D81B1C253EB100AFAD3F /* NSData+ImageContentType.m in Sources */,
 				609727CE1C0D4CAD003396CE /* QRCodeViewController.m in Sources */,
@@ -1181,7 +1182,6 @@
 				60A920371C34FF1600150209 /* UpdateInfoCell.m in Sources */,
 				6071CEE51C2D17EC002BE159 /* PartTitleCell.m in Sources */,
 				6000D8201C253EB100AFAD3F /* SDWebImageDownloaderOperation.m in Sources */,
-				609727941C0C5DA5003396CE /* SourceCell.m in Sources */,
 				6000D7F41C25066D00AFAD3F /* User.m in Sources */,
 				606622C71C313414003817CE /* SignUpViewcontroller.m in Sources */,
 				6071CEEA1C2D193F002BE159 /* PageDetailCell.m in Sources */,
@@ -1282,6 +1282,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "d95d91cd-0839-4cb9-ba97-6139f5c7b836";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1319,6 +1320,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "d95d91cd-0839-4cb9-ba97-6139f5c7b836";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1332,6 +1334,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SubCourse/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1341,6 +1344,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.scau.bighead.SubCourse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -1351,6 +1355,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SubCourse/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1360,6 +1365,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.scau.bighead.SubCourse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

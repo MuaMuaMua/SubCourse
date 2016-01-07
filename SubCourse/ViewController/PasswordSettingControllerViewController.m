@@ -15,6 +15,13 @@
 #import "MBProgressHUD.h"
 #import "SubcourseManager.h"
 #import "AppDelegate.h"
+#import "YTKKeyValueStore.h"
+#import "CacheManager.h"
+
+#define newPaperTablename @"newPaperTablename"
+#define newQuestionTable @"questionTablename"
+#define favouriteTabel @"favouriteTable"
+#define newFavouriteListTable @"newFavouriteListTable"
 
 @interface PasswordSettingControllerViewController ()<SubcourseManagerDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate>{
     
@@ -31,6 +38,12 @@
     AppDelegate * _appDelegate;
     
     UIImagePickerController * _picker;
+    
+    YTKKeyValueStore * _kvs;
+    
+    CacheManager * _cManager;
+    
+    
 }
 
 @property (strong, nonatomic) SCTitleMenu * titleMenu;
@@ -42,6 +55,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self subcourseManagerSetting];
+    
+    //初始化 titleBtn
+    UIButton * titleBtn = [[UIButton alloc] init];
+    [titleBtn setTitle:@"安全设置" forState:UIControlStateNormal];
+    titleBtn.backgroundColor = [UIColor blueColor];
+    [titleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [titleBtn setImage:[UIImage imageNamed:@"dd"] forState:UIControlStateNormal];
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationItem.titleView = titleBtn;
+    
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"nickname"]!=nil) {
+        _nicknameLabel.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"nickName"];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -57,25 +83,41 @@
 - (void)subcourseManagerSetting {
     _scManager = [SubcourseManager sharedInstance];
     _scManager.delegate = self;
+    _cManager = [CacheManager sharedInstance];
 }
 
 - (void)userLogoutCallBack:(NSDictionary *)responseData {
+    [_cManager.kvs clearTable:newFavouriteListTable];
+    [_cManager.kvs clearTable:newPaperTablename];
+    [_cManager.kvs clearTable:newQuestionTable];
+    [_cManager.kvs clearTable:favouriteTabel];
     NSLog(@"%@",responseData);
     [MBProgressHUD showSuccess:@"注销成功"];
+    NSString*appDomain = [[NSBundle mainBundle]bundleIdentifier];
+    [[NSUserDefaults standardUserDefaults]removePersistentDomainForName:appDomain];
     _appDelegate = [[UIApplication sharedApplication]delegate];
     [_appDelegate showLoginView];
 }
 
 - (void)changePassowrdCallBack:(NSDictionary *)responseData {
-    [MBProgressHUD showSuccess:@"成功修改密码"];
-    [_originalPasswordField setText:@""];
-    [_newPasswordField setText:@""];
-    [_newPasswordComfirmField setText:@""];
+    
+    NSLog(@"旧密码");
+    NSNumber * code = [responseData objectForKey:@"code"];
+    if (code.intValue == 200) {
+        [MBProgressHUD showSuccess:@"成功修改密码"];
+        [[NSUserDefaults standardUserDefaults]setObject:_newPasswordComfirmField.text forKey:@"password"];
+        
+        [_originalPasswordField setText:@""];
+        [_newPasswordField setText:@""];
+        [_newPasswordComfirmField setText:@""];
+        
+    }
 }
 
 #pragma mark - resetPassword
 
 - (IBAction)resetPasswordAction:(id)sender {
+    [MBProgressHUD showMessage:@"修改ING"];
     NSString * originalPassword = [[NSUserDefaults standardUserDefaults] objectForKey:@"password"];
     if (![_originalPasswordField.text isEqualToString:originalPassword]) {
         [MBProgressHUD showError:@"密码错误"];
@@ -106,6 +148,7 @@
     if (buttonIndex == 0) {
         NSLog(@"取消");
     }else if (buttonIndex == 1){
+
         [_scManager userLogout];
     }
 }

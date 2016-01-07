@@ -14,9 +14,17 @@
 #import "PasswordSettingControllerViewController.h"
 #import "LoginViewcontroller.h"
 #import "SubcourseManager.h"
+#import "CacheManager.h"
+
+#define newPaperTablename @"newPaperTablename"
+#define newQuestionTable @"questionTablename"
+#define favouriteTabel @"favouriteTable"
+#define newFavouriteListTable @"newFavouriteListTable"
+
 
 @interface AppDelegate () <SubcourseManagerDelegate>{
     SubcourseManager * _scManager;
+    CacheManager * _cManager;
 }
 
 @end
@@ -27,13 +35,19 @@
     
 //    [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];//注册本地推送
 //    [self getQiNiuToken];
+//    _cManager = [CacheManager sharedInstance];
+//    
+//    [_cManager.kvs clearTable:newFavouriteListTable];
+//    [_cManager.kvs clearTable:newPaperTablename];
+//    [_cManager.kvs clearTable:newQuestionTable];
+//    [_cManager.kvs clearTable:favouriteTabel];
     
-    NSString * phoneNumber = [[NSUserDefaults standardUserDefaults] objectForKey:@"loginPhoneNumber"];
+    NSString * phoneNumber = [[NSUserDefaults standardUserDefaults] objectForKey:@"phone"];
     if (phoneNumber != nil && ![phoneNumber isEqualToString:@""]) {
         //判定之前是否登录了，登录过，在nsuserDefaults中保存登陆信息、token、phoneNumber、学号、昵称、信息
         [self startEntry];
     }else {
-        // 进入未登陆状态。
+//         进入未登陆状态。
         [self showLoginView];
     }
     // Override point for customization after application launch.
@@ -60,7 +74,7 @@
     [self initURLMapping];
     [self initSafeController];
     [self initSourceController];
-    [self initMyFavouriteController];
+//    [self initMyFavouriteController];
     [self initMyQuestionController];
 //    [self initPasswordSettingController];
     [self initAccountSettingController];
@@ -73,7 +87,7 @@
     [self initURLMapping];
     [self initSafeController];
     [self initSourceController];
-    [self initMyFavouriteController];
+//    [self initMyFavouriteController];
     [self initMyQuestionController];
     [self initAccountSettingController];
     [self initSlideNavigator];
@@ -84,7 +98,7 @@
     [[UMNavigationController config] setValuesForKeysWithDictionary:[[NSDictionary alloc] initWithObjectsAndKeys:
                                                                      @"SourceController", @"SC://Source",
                                                                      @"MyFavouriteController", @"SC://MyFavourite",
-                                                                     @"MyQuestionController",@"SC://MyQuestion",
+//                                                                     @"MyQuestionController",@"SC://MyQuestion",
                                                                      @"SafetySettingController", @"SC://Safe",
                                                                      @"PasswordSettingControllerViewController",@"SC://PasswordSetting",
                                                                      //还有一行是  注销的不同的section
@@ -93,7 +107,7 @@
 
 - (void) initSlideNavigator {
     self.slideNavigator = nil;
-    self.slideNavigator = [[SCSlideNavigationController alloc] initWithItems:@[@[self.sourceNavigator,self.myFavouriteNavigator,self.myQuestionNavigator,self.myAccountSettingNavigator,self.safetyNavigator]]];
+    self.slideNavigator = [[SCSlideNavigationController alloc] initWithItems:@[@[self.sourceNavigator,self.myFavouriteNavigator,self.myAccountSettingNavigator,self.safetyNavigator]]];
 }
 
 - (void) initSafeController {
@@ -114,14 +128,14 @@
     self.myFavouriteNavigator.title = @"我的收藏";
 }
 
-- (void) initMyFavouriteController{
-    self.myQuestionNavigator = [[UMNavigationController alloc] initWithRootViewControllerURL:[[NSURL URLWithString:@"SC://MyQuestion"]
-                                                                                               addParams:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                          @"我的提问", @"title",
-                                                                                                          @"sss", @"list",
-                                                                                                          nil]]];
-    self.myQuestionNavigator.title = @"我的提问";
-}
+//- (void) initMyFavouriteController{
+//    self.myQuestionNavigator = [[UMNavigationController alloc] initWithRootViewControllerURL:[[NSURL URLWithString:@"SC://MyQuestion"]
+//                                                                                               addParams:[NSDictionary dictionaryWithObjectsAndKeys:
+//                                                                                                          @"我的提问", @"title",
+//                                                                                                          @"sss", @"list",
+//                                                                                                          nil]]];
+//    self.myQuestionNavigator.title = @"我的提问";
+//}
 
 - (void) initSourceController {
     self.sourceNavigator = [[UMNavigationController alloc] initWithRootViewControllerURL:[[NSURL URLWithString:@"SC://Source"]

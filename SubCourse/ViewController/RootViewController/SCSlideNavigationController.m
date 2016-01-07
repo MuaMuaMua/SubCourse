@@ -9,6 +9,8 @@
 #import "SCSlideNavigationController.h"
 #import "SlideViewCell.h"
 #import "StyleConstant.h"
+#import "UIImageView+WebCache.h"
+
 
 @interface SCSlideNavigationController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -18,10 +20,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(uploadAvatarUrl) name:@"UploadAvatarUrl" object:nil];
     [self initArray];
     self.slideView.dataSource = self;
     self.slideView.delegate = self;
-    self.slideView.scrollEnabled = NO;
+    self.slideView.scrollEnabled = YES;
+    self.slideView.separatorStyle = UITableViewCellSeparatorStyleNone;
     UIView * separatorLine = [[UIView alloc]initWithFrame:CGRectMake(self.slideView.frame.size.width * SLIDE_VIEW_WIDTH - 2, 0, 2, self.view.frame.size.height)];
     separatorLine.backgroundColor = [UIColor blackColor];
     [self.slideView addSubview:separatorLine];
@@ -39,12 +43,12 @@
     self.titleArray = [[NSMutableArray alloc]init];
     NSString * title1 = @"资 料 库";
     NSString * title2 = @"我的收藏";
-    NSString * title3 = @"我的提问";
-    NSString * title4 = @"设  置";
+    NSString * title3 = @"设  置";
+//    NSString * title4 = @"设  置";
 //    NSString * title5 = @"发现";
-    NSString * title6 = @"注销";
+//    NSString * title6 = @"注销";
     
-    self.titleArray = [[NSMutableArray alloc]initWithObjects:title1,title2,title3,title4,title6, nil];
+    self.titleArray = [[NSMutableArray alloc]initWithObjects:title1,title2,title3, nil];
 }
 
 #pragma mark - tableview datasource && delegate
@@ -55,7 +59,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 4;
+        return 3;
     }else {
         return 1;
     }
@@ -94,7 +98,7 @@
   
 - (CGFloat )tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return self.slideView.frame.size.height / 3 ;
+        return 240 ;
     }else {
         return 60;
     }
@@ -102,21 +106,37 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        UIView * headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 260, 180)];
+        UIView * headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 260, 240)];
         //设置icon
-        UIButton * iconBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.slideView.frame.size.width * SLIDE_VIEW_WIDTH / 2 - 40, 70, 80, 80)];
-        [iconBtn setImage:[UIImage imageNamed:@"Oval"] forState:UIControlStateNormal];
+//        UIButton * iconBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.slideView.frame.size.width * SLIDE_VIEW_WIDTH / 2 - 40, 70, 80, 80)];
+        UIImageView * iconImageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.slideView.frame.size.width * SLIDE_VIEW_WIDTH / 2 - 40, 70, 80, 80)];
+
+        iconImageView.layer.masksToBounds = YES;
+        iconImageView.layer.cornerRadius = 40;
+        iconImageView.userInteractionEnabled = YES;
+//        personalAvatarCell.avatarImageView.layer.masksToBounds = YES;
+//        personalAvatarCell.avatarImageView.layer.cornerRadius = 50;
+        if ([[NSUserDefaults standardUserDefaults]objectForKey:@"avatar"] != nil) {
+            NSString * imageURL = [[NSUserDefaults standardUserDefaults]objectForKey:@"avatar"];
+            NSURL * url = [NSURL URLWithString:imageURL];
+            [iconImageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"Oval"]];
+        }
         //设置icon 下面的label
         UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake( 0,  160, self.slideView.frame.size.width * SLIDE_VIEW_WIDTH, 40)];
         label.font = [UIFont systemFontOfSize:20];
         label.textColor = [UIColor blackColor];
-        label.text = @"用户学号";
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"phone"] != nil) {
+            label.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"phone"];
+        }
+//        label.text = @"用户学号";
         label.textAlignment = UITextAlignmentCenter;
         //设置分割线
-        UIView * separatorView = [[UIView alloc]initWithFrame:CGRectMake(0,self.slideView.frame.size.height/3 - 2, self.slideView.frame.size.width, 2)];
+        UIView * separatorView = [[UIView alloc]initWithFrame:CGRectMake(0,238, self.slideView.frame.size.width, 2)];
         separatorView.backgroundColor = [UIColor blackColor];
-        [iconBtn addTarget:self action:@selector(clickIcon) forControlEvents:UIControlEventTouchUpInside];
-        [headView addSubview:iconBtn];
+        UITapGestureRecognizer * oneTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickIcon)];
+        oneTap .numberOfTapsRequired = 1;
+        [iconImageView addGestureRecognizer:oneTap];
+        [headView addSubview:iconImageView];
         [headView addSubview:label];
         [headView addSubview:separatorView];
         return headView;
@@ -135,8 +155,14 @@
 }
 
 - (void)clickIcon {
-    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:4 inSection:0];
+    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
     [self showItemAtIndex:indexPath withAnimation:YES];
+}
+
+#pragma mark - 更新头像 通知
+
+- (void)uploadAvatarUrl {
+    [self.slideView reloadData];
 }
 
 /*

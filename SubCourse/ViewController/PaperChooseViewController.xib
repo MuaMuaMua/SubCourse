@@ -31,8 +31,13 @@
                     <items>
                         <navigationItem title="Title" prompt="" id="Pt7-20-6aX">
                             <leftBarButtonItems>
-                                <barButtonItem image="whiteBackIcon" id="rSX-jy-7fb"/>
-                                <barButtonItem title="繼續閱讀" id="0sg-un-j50">
+                                <barButtonItem image="whiteBackIcon" id="rSX-jy-7fb">
+                                    <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <connections>
+                                        <action selector="backAction:" destination="-1" id="682-gS-XAL"/>
+                                    </connections>
+                                </barButtonItem>
+                                <barButtonItem title="继续阅读" id="0sg-un-j50">
                                     <color key="tintColor" red="0.90388838370891256" green="0.92796750420099294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <connections>
                                         <action selector="clickBack:" destination="-1" id="KBF-ui-RhO"/>
@@ -59,7 +64,7 @@
                 <constraint firstItem="wKP-11-zpH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="oIP-i2-kgE"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-            <point key="canvasLocation" x="645.5" y="125.5"/>
+            <point key="canvasLocation" x="776.5" y="175.5"/>
         </view>
     </objects>
     <resources>

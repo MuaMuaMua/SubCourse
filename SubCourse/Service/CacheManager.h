@@ -10,6 +10,8 @@
 #import "YTKKeyValueStore.h"
 #import "User.h"
 #import "PaperModel.h"
+#import "QuestionModel.h"
+
 
 @interface CacheManager : NSObject
 
@@ -37,7 +39,7 @@
 /*
  *将paperDictionarys获取index 解析成paper类型。
  */
-- (PaperModel *)transformPaperDictionary:(NSDictionary *)paperDictionarys Index:(NSInteger )index;
+//- (PaperModel *)transformPaperDictionary:(NSDictionary *)paperDictionarys Index:(NSInteger )index;
 
 /*
  *从数据库中获取试卷dictionarys
@@ -74,5 +76,25 @@
  *添加收藏
  */
 - (void)addFavouriteInDB:(int )firstIndex SecondIndex:(int)secondIndex IsFavourite:(BOOL)isFavourite ;
+
+/*
+ *将paperDictionary 的内容转化为paper数组形式 返回 (目录用这个)
+ */
+- (NSMutableArray *)transformPaperDictionary2:(NSDictionary *)paperDictionarys;
+
+/*
+ *
+ */
+- (void)savePaperIntoDB:(NSDictionary *)paperDictionary;
+
+- (NSArray *)getAllpaperFromDB ;
+
+- (NSDictionary *)accemblePaperFromDB:(NSDictionary *)paperDictionary; 
+
+- (void)addfavouriteData:(QuestionModel * )questionModel IsFavourite:(BOOL)isFavourite;
+
+- (PaperModel *)getAllFavouriteListFromDB:(NSArray * )paperList;
+
+- (PaperModel *)getFavouriteInFavouriteTable ;
 
 @end

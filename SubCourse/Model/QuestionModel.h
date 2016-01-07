@@ -19,5 +19,6 @@
 @property int pageNum;
 @property BOOL isFavourite;
 @property BOOL isQuiz;
+@property (strong, nonatomic) NSString * paperTitle;
 
 @end

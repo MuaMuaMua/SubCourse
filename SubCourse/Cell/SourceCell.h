@@ -2,8 +2,8 @@
 //  SourceCell.h
 //  SubCourse
 //
-//  Created by wuhaibin on 15/11/29.
-//  Copyright © 2015年 wuhaibin. All rights reserved.
+//  Created by wuhaibin on 16/1/6.
+//  Copyright © 2016年 wuhaibin. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -13,5 +13,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *chapterLabel;
 
 @property (strong, nonatomic) IBOutlet UILabel *countLabel;
+
+@property (strong, nonatomic) IBOutlet UILabel *paperTitleLabel;
+
 
 @end

@@ -17,6 +17,16 @@
 @property (strong, nonatomic) NSMutableArray * pageIntroductionArray;
 @property (strong, nonatomic) PaperModel * paperModel;
 
+
+/*
+ *type 是@“1”的时候 是所有试卷的内容， type 是@“2”的时候 为收藏m
+ */
+@property (strong, nonatomic) NSString * type;
+
 @property NSInteger firstPaperIndex;
+
+@property int currentSelect;
+
+@property BOOL isFavouriteListPaper;
 
 @end

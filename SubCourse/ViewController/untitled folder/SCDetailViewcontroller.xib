@@ -13,7 +13,6 @@
                 <outlet property="_favouriteBtn" destination="J2g-zH-Rzp" id="Wm3-ps-GKo"/>
                 <outlet property="_navigationBar" destination="G21-7s-qJK" id="hEm-dp-ikH"/>
                 <outlet property="_navigationItem" destination="Wls-3L-00l" id="00N-1J-Y6q"/>
-                <outlet property="_quizBtn" destination="MFh-4P-7rr" id="IUc-Bh-hka"/>
                 <outlet property="_slider" destination="nm9-0A-mJu" id="7SQ-V2-YtI"/>
                 <outlet property="categoryBtn" destination="TEZ-WF-xd2" id="UvZ-r3-FRk"/>
                 <outlet property="contentTextView" destination="TzK-qb-loj" id="Tu3-sp-83D"/>
@@ -46,18 +45,11 @@
                                     </connections>
                                 </barButtonItem>
                             </leftBarButtonItems>
-                            <rightBarButtonItems>
-                                <barButtonItem image="Fill 180" id="J2g-zH-Rzp">
-                                    <connections>
-                                        <action selector="favouriteAction:" destination="-1" id="c8C-An-yJF"/>
-                                    </connections>
-                                </barButtonItem>
-                                <barButtonItem title="提问" id="MFh-4P-7rr">
-                                    <connections>
-                                        <action selector="changeFont:" destination="-1" id="LnK-z7-n8l"/>
-                                    </connections>
-                                </barButtonItem>
-                            </rightBarButtonItems>
+                            <barButtonItem key="rightBarButtonItem" image="Fill 180" id="J2g-zH-Rzp">
+                                <connections>
+                                    <action selector="favouriteAction:" destination="-1" id="c8C-An-yJF"/>
+                                </connections>
+                            </barButtonItem>
                         </navigationItem>
                     </items>
                 </navigationBar>
@@ -106,7 +98,7 @@
                             <rect key="frame" x="30" y="8" width="315" height="543"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="21"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                     </subviews>
@@ -135,7 +127,7 @@
                 <constraint firstItem="G21-7s-qJK" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tbA-Zu-Vyd"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-            <point key="canvasLocation" x="-65.5" y="351.5"/>
+            <point key="canvasLocation" x="106.5" y="368.5"/>
         </view>
     </objects>
     <resources>

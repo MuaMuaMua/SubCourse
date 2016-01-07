@@ -28,5 +28,6 @@
 @property (strong, nonatomic) id<SCDetailViewDelegate> delegate;
 @property (strong, nonatomic) PaperModel * paperModel;
 @property NSInteger firstPaperIndex;
+@property BOOL isFavouriteListPaper;
 
 @end

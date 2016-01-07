@@ -30,7 +30,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-
+    [self.continueBtn setWidth:0];
+//    self.continueBtn.title = @""
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -46,6 +47,10 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (IBAction)backAction:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)clickBack:(id)sender {

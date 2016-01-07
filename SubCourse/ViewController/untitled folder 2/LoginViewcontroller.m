@@ -14,6 +14,15 @@
 #import "MBProgressHUD.h"
 #import "SignUpViewcontroller.h"
 
+#define tablename @"SCBasicInfo"
+#define paperTablename @"paperTable"
+
+#define newPaperTablename @"newPaperTablename"
+#define newQuestionTable @"questionTablename"
+#define favouriteTabel @"favouriteTable"
+#define newFavouriteListTable @"newFavouriteListTable"
+//_instance.kvs = [[YTKKeyValueStore alloc]initDBWithName:@"SubCourse"];
+
 @interface LoginViewcontroller ()<UITextFieldDelegate,SubcourseManagerDelegate>{
     
     IBOutlet UITextField *_studentField;
@@ -83,21 +92,37 @@
         [[NSUserDefaults standardUserDefaults] setObject:[userDictionary objectForKey:@"school"] forKey:@"school"];
         [[NSUserDefaults standardUserDefaults] setObject:[userDictionary objectForKey:@"address"] forKey:@"address"];
         [[NSUserDefaults standardUserDefaults] setObject:[userDictionary objectForKey:@"clazz"] forKey:@"clazz"];
-
+        [[NSUserDefaults standardUserDefaults] setObject:[userDictionary objectForKey:@"avatar"] forKey:@"avatar"];
         
+//#define newPaperTablename @"newPaperTablename"
+//#define newQuestionTable @"questionTablename"
+//#define favouriteTabel @"favouriteTable"
+//#define newFavouriteListTable @"newFavouriteListTable"
+        //_instance.kvs = [[YTKKeyValueStore alloc]initDBWithName:@"SubCourse"];
+//        _cManager.kvs = [[YTKKeyValueStore alloc]initWithDBWithPath:@"SubCource"];
+//#define tablename @"SCBasicInfo"
+//#define paperTablename @"paperTable"
+//        [_cManager.kvs clearTable:newPaperTablename];
+//        [_cManager.kvs clearTable:newQuestionTable];
+//        [_cManager.kvs clearTable:favouriteTabel];
+//        [_cManager.kvs clearTable:newFavouriteListTable];
+//        [_cManager.kvs clearTable:tablename];
+//        [_cManager.kvs clearTable:paperTablename];
         NSString * nickName = [[NSUserDefaults standardUserDefaults]objectForKey:@"nickName"];
         
-        [_scManager getQiNiuToken];
+//        [_scManager getQiNiuToken];
         [MBProgressHUD hideHUD];
         [MBProgressHUD showSuccess:@"登陆成功!"];
+        _appdelegate = [[UIApplication sharedApplication]delegate];
+        [_appdelegate startEntry];
     }
 }
 
 - (void)getQiNiuCallBack:(NSDictionary *)responseData{
     NSLog(@"%@",responseData);
     [[NSUserDefaults standardUserDefaults] setObject:[responseData objectForKey:@"upToken"] forKey:@"QiNiuToken"];
-    _appdelegate = [[UIApplication sharedApplication]delegate];
-    [_appdelegate startEntry];
+//    _appdelegate = [[UIApplication sharedApplication]delegate];
+//    [_appdelegate startEntry];
 }
 
 #pragma mark - textField delegate

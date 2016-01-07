@@ -13,20 +13,13 @@
 #import "InfoCell.h"
 #import "MBProgressHUD+MJ.h"
 #import "MBProgressHUD.h"
+#import <QiniuSDK.h>
+#import "SubcourseManager.h"
+#import "UIImageView+WebCache.h"
 
-@interface SafetySettingController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate> {
+@interface SafetySettingController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,SubcourseManagerDelegate> {
     UIImagePickerController * _picker;
     UIImage * _pickImage;
-    
-//    InfoCell * _nicknameCell; //1
-//    InfoCell * _studentNoCell;
-//    InfoCell * _schoolCell;
-//    InfoCell * _clazzCell;
-//    InfoCell * _realNameCell;
-//    InfoCell * _idCardCell;
-//    InfoCell * _phoneCell;
-//    InfoCell * _emailCell;
-//    InfoCell * _addressCell;
     
     NSString * _nickname;
     NSString * _studentNo;
@@ -37,8 +30,7 @@
     NSString * _phone;
     NSString * _email;
     NSString * _address;
-    
-    
+    SubcourseManager * _scManager;
 }
 
 @end
@@ -48,13 +40,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    [self initTitleArray];
+    [self initSubcourseManager];
     self.view.backgroundColor = [UIColor greenColor];
-//    self.tableView.delegate = self;
-//    self.tableView.dataSource = self;
-//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    self.title = @"我的资料";
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshIcon) name:@"RefreshIcon" object:nil];
-    // Do any additional setup after loading the view from its nib.
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -65,6 +53,20 @@
 - (void)viewWillAppear:(BOOL)animated {
     [self initCellInfo];
     [self initTableView];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(uploadAvatarUrl) name:@"UploadAvatarUrl" object:nil];
+}
+
+- (void)uploadAvatarUrl {
+    [MBProgressHUD showSuccess:@"上传成功"];
+    [_scManager uploadAvatarUrl:[[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"]];
+    [self.tableView reloadData];
+}
+
+#pragma mark - 初始化subcourseManager
+
+- (void)initSubcourseManager {
+    _scManager = [SubcourseManager sharedInstance];
+    _scManager.delegate = self;
 }
 
 - (void)initTableView {
@@ -231,13 +233,19 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    
+    
     _pickImage = [info objectForKey:@"UIImagePickerControllerEditedImage"];
+
+    NSData * imageData = UIImageJPEGRepresentation(_pickImage, 1);
+    
+    [_scManager getQiNiuToken:imageData];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"RefreshIcon" object:nil];
     [_picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     
     UINib * nib = [UINib nibWithNibName:@"PersonalAvatarCell" bundle:nil];
     static NSString * certifAvatar = @"PersonalAvatarCell";
@@ -254,11 +262,14 @@
         if (personalAvatarCell == nil) {
             personalAvatarCell = [[PersonalAvatarCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:certifAvatar];
         }
-        if (_pickImage == nil) {
-            personalAvatarCell.avatarImageView.image = [UIImage imageNamed:@"Oval"];
+        if ([[NSUserDefaults standardUserDefaults]objectForKey:@"avatar"]!=nil) {
+            NSURL * url = [NSURL URLWithString:[[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"]];
+            [personalAvatarCell.avatarImageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"Oval"]];
         }else {
-            personalAvatarCell.avatarImageView.image = _pickImage;
+            personalAvatarCell.avatarImageView.image = [UIImage imageNamed:@"Oval"];
         }
+        personalAvatarCell.avatarImageView.layer.masksToBounds = YES;
+        personalAvatarCell.avatarImageView.layer.cornerRadius = 50;
         UIView * separatorLine = [[UIView alloc]initWithFrame:CGRectMake(20, 139, self.view.frame.size.width, 1)];
         separatorLine.backgroundColor = [UIColor colorWithRed:211.0/255 green:211.0/255 blue:211.0/255 alpha:1];
         [personalAvatarCell.contentView addSubview:separatorLine];
@@ -358,38 +369,6 @@
             return _addressCell;
         }
     }
-    
-//    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:certif];
-//    if (cell == nil) {
-//        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:certif];
-//    }
-//    NSString * labelText = [[self.titleArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row];
-//    cell.textLabel.text = labelText;
-//    if ((indexPath.section == 0 && indexPath.row == 2 )|| (indexPath.section == 1 && indexPath.row == 1)) {
-//        //不加上separatorLine
-//    }else {
-//        UIView * separatorLine = [[UIView alloc]initWithFrame:CGRectMake(20, 43, self.view.frame.size.width, 1)];
-//        separatorLine.backgroundColor = [UIColor colorWithRed:211.0/255 green:211.0/255 blue:211.0/255 alpha:1];
-//        if (indexPath.section == 0 && indexPath.row == 0) {
-//            separatorLine.frame = CGRectMake(20, 139, self.view.frame.size.width, 1);
-//            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//            if (_pickImage == nil) {
-//                UIImageView * imageview = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 150, 20, 100, 100)];
-//                imageview.image = [UIImage imageNamed:@"Oval"];
-//                [cell.contentView addSubview:imageview];
-//            }else {
-//                UIImageView * imageview = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 150, 20, 100, 100)];
-//                imageview.image = _pickImage;
-//                imageview.layer.masksToBounds = YES;
-//                imageview.layer.cornerRadius = 50;
-//                [cell.contentView addSubview:imageview];
-//            }
-//            }else if(indexPath.section == 2 && indexPath.row == 4) {
-//                separatorLine.frame = CGRectMake(0, 43, self.view.frame.size.width, 1);
-//        }
-//        [cell.contentView addSubview:separatorLine];
-//    }
-//    return cell;
     return  nil;
 }
 

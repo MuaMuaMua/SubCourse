@@ -11,6 +11,7 @@
 #import "SubcourseManager.h"
 #import "MBProgressHUD+MJ.h"
 #import "MBProgressHUD.h"
+#import "CacheManager.h"
 
 @interface SCDetailViewcontroller ()<SubcourseManagerDelegate>{
     IBOutlet UINavigationBar *_navigationBar;
@@ -25,6 +26,8 @@
     SubcourseManager * _scManager;
     IBOutlet UIBarButtonItem *_quizBtn;
     IBOutlet UIBarButtonItem *_favouriteBtn;
+    CacheManager * _cManager;
+    
 }
 
 @end
@@ -37,6 +40,12 @@
     [self setSlider];
     [self setBottomLabels];
     [self initNavigationItem];
+    //判断是否从 favouriteVC中跳转
+    if (self.isFavouriteListPaper) {
+        [categoryBtn setImage:[UIImage imageNamed:@""]];
+        [categoryBtn setEnabled:NO];
+    }
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(favouritSuccessCallBack) name:@"favouritSuccessCallBack" object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -69,15 +78,21 @@
 - (void)setscManager {
     _scManager = [SubcourseManager sharedInstance];
     _scManager.delegate = self;
+    
+    _cManager = [CacheManager sharedInstance];
+    
+}
+
+- (void)favouritSuccessCallBack {
+    
 }
 
 - (void)addFavouriteCallBack:(NSDictionary *)responseData {
     NSNumber * code = [responseData objectForKey:@"code"];
     if (code.intValue == 200) {
-        [MBProgressHUD showSuccess:@"收藏成功"];
-        [_favouriteBtn setImage:[UIImage imageNamed:@"fa-smile-o"]];
-    }else {
         
+    }else {
+        [MBProgressHUD showError:@"收藏失败"];
     }
 }
 
@@ -95,6 +110,12 @@
 
 - (void)removeFavouriteCallBack:(NSDictionary *)responseData {
     
+    NSNumber * code = [responseData objectForKey:@"code"];
+    if (code.intValue == 200) {
+        
+    }else {
+        [MBProgressHUD showError:@"取消收藏失败"];
+    }
 }
 
 - (IBAction)backAction:(id)sender {
@@ -110,18 +131,34 @@
 }
 
 - (IBAction)favouriteAction:(id)sender {
-//    [_scManager getAllFavourite];
+
     NSLog(@"%f",self.value);
-//    int intValue = self.value;
-    if (self.questionModel.isFavourite) {
-        self.questionModel.isFavourite = NO;
-    }else {
+
+    if (self.questionModel.isFavourite == NO) {
+//        [MBProgressHUD showSuccess:@"收藏成功"];
+        [_favouriteBtn setImage:[UIImage imageNamed:@"fa-smile-o"]];
+        NSNumber * number = [NSNumber numberWithFloat:self.value];
+        int intVal = [number intValue];
+        int firs = self.firstPaperIndex;
+//        [_cManager addFavouriteInDB:firs SecondIndex:intVal IsFavourite:YES];
+        self.questionModel.paperTitle = self.paperModel.title;
+        [_cManager addfavouriteData:self.questionModel IsFavourite:YES];
+        
+        [_scManager addFavourite:self.questionModel.questionModelId];
         self.questionModel.isFavourite = YES;
+    }else {
+//        [MBProgressHUD showSuccess:@"收藏成功"];
+        [_favouriteBtn setImage:[UIImage imageNamed:@"Fill 180"]];
+        NSNumber * number = [NSNumber numberWithFloat:self.value];
+        int intVal = [number intValue];
+        int firs = self.firstPaperIndex;
+        self.questionModel.paperTitle = self.paperModel.title;
+        [_cManager addfavouriteData:self.questionModel IsFavourite:NO];
+        self.questionModel.isFavourite = NO;
+        //重写方法
+        [_scManager removeFavourite:self.questionModel.questionModelId];
     }
-    NSNumber * number = [NSNumber numberWithFloat:self.value];
-    int intVal = [number intValue];
     
-    [_scManager addFavourite:self.questionModel.questionModelId];
 }
 
 #pragma mark - bottomView Settings
@@ -161,14 +198,14 @@
 
 - (void)setTextView {
     contentTextView.text = [self.questionModel.question stringByAppendingString:self.questionModel.answer];
-//     contentTextView.text = @"卢象昇，宜兴人。象昇虽文士，善射，娴．将略。（崇祯）六年，贼流入畿辅，据西山，象昇击却之。贼走还西山，围冷水村 ，象昇设伏大破之。象昇每临阵，身先士卒，与贼格斗，刃及鞍勿顾，失马即步战。逐贼危． 崖，一贼自巅射中象昇额，象昇提刀战益疾。贼骇走，相戒曰：“卢廉使遇即死，不可犯。” （十年）九月，清兵驻与牛兰。召宣、大、山西三总兵杨国柱、王朴、虎大威入卫。赐象昇尚方剑，督．天下援兵。象昇麻衣草履，誓师及郊。当是时，嗣昌、起潜①主和议。  象昇闻之，顿足叹曰：“予受国恩，恨不得死所，有如万分一不幸，宁捐躯断脰耳。”决策议战，然事多□嗣昌、起潜挠。疏请分兵，则议宣、大、山西三帅属象昇，关、宁诸路属起潜。象昇名督天下兵，实不及二万。次顺义。  清兵南下，三路出师··象昇提残卒，宿三宫野外。十二月十一日，进师至贾庄。起潜拥关、宁兵在鸡泽，距贾庄五十里，象昇遣廷麟往乞援，不应。师至蒿水桥，遇清兵。";
+    contentTextView.font = [UIFont systemFontOfSize:20];
 }
 
 #pragma mark - rewriteSlider 
 
 - (void)setBottomLabels {
-    int maxInt = self.maxValue;
-    int curretInt = self.value;
+    int maxInt = self.maxValue+1;
+    int curretInt = self.value+1;
     int minInt = self.minValue;
     countLabel.text = [NSString stringWithFormat:@"%d/%d",curretInt,maxInt];
     pageLabel.text = [NSString stringWithFormat:@"还有%d页",maxInt - curretInt];

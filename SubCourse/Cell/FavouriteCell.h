@@ -10,4 +10,8 @@
 
 @interface FavouriteCell : UITableViewCell
 
+@property (strong, nonatomic) IBOutlet UILabel *paperTitleLabel;
+
+@property (strong, nonatomic) IBOutlet UILabel *questionTitleLabel;
+
 @end

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <AFHTTPRequestOperationManager.h>
 #import "User.h"
+#import "CacheManager.h"
 
 @protocol SubcourseManagerDelegate <NSObject>
 
@@ -60,6 +61,8 @@
 
 @property (strong, nonatomic) id<SubcourseManagerDelegate> delegate;
 
+@property (strong, nonatomic) CacheManager * cManager;
+
 + (SubcourseManager *) sharedInstance;
 
 - (id) init;
@@ -107,12 +110,11 @@
 /*
  *获取七牛的token字段 上传图片使用
  */
-- (void)getQiNiuToken;
+//- (void)getQiNiuToken;
 
 /*
- *
  *获取全部试卷
-*/
+ */
 - (void)getAllPaper;
 
 /*
@@ -156,5 +158,10 @@
  *获取所有提问
  */
 - (void)getAllQuiz;
+
+/*
+ *获取七牛的token字段 上传图片使用
+ */
+- (void)getQiNiuToken:(NSData *)imageData;
 
 @end

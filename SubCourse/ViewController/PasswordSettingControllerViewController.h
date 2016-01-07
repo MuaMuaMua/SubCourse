@@ -10,7 +10,6 @@
 #import "SCRootViewController.h"
 @interface PasswordSettingControllerViewController :SCRootViewController
 
-//@property (strong, nonatomic) IBOutlet UITableView *tableView;
-//@property (strong, nonatomic) NSMutableArray * titleArray;
+
 
 @end

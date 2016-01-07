@@ -10,10 +10,21 @@
 #import <AFNetworking/AFHTTPRequestOperation.h>
 #import "User.h"
 #import <Qiniu/QiniuSDK.h>
+#import "CacheManager.h"
+#import "MBProgressHUD+MJ.h"
+#import "MBProgressHUD.h"
 
 #define url @"http://121.42.205.101:9000"
-@implementation SubcourseManager{
+#define QiNiuDomain @"http://7xp8cz.com1.z0.glb.clouddn.com"
 
+
+//http://7xnpl8.com1.z0.glb.clouddn.com/4d33b9a1-d_1452091318822
+//zQIAAIGcHD9l3SYU    http://7xp8cz.com1.z0.glb.clouddn.com/a91721ea-f_1452097928768
+
+//http://7xnpl8.com1.z0.glb.clouddn.com/fd4c5a4c-9_1452096442875
+
+@implementation SubcourseManager{
+    
 }
 
 + (SubcourseManager *)sharedInstance {
@@ -21,6 +32,8 @@
     @synchronized(self) {
         if (!_instance) {
             _instance = [[SubcourseManager alloc]init];
+            _instance.cManager = [CacheManager sharedInstance];
+            _instance.cManager.kvs = [[YTKKeyValueStore alloc]initDBWithName:@"SUBCOURSEDB"];
             _instance.networkingManager = [[AFHTTPRequestOperationManager alloc]init];
             _instance.networkingManager.responseSerializer = [[AFHTTPResponseSerializer alloc]init];
             _instance.networkingManager.requestSerializer.timeoutInterval = 20;
@@ -119,23 +132,44 @@
 /*
  *获取七牛的token字段 上传图片使用
  */
-- (void)getQiNiuToken {
+- (void)getQiNiuToken:(NSData *)imageData {
     NSString * urlString =  @"/qiniu/uptoken";
     urlString = [url stringByAppendingString:urlString];
     NSMutableDictionary * params = [[NSMutableDictionary alloc]init];
     NSString * token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
     NSString * userId = [[NSUserDefaults standardUserDefaults] objectForKey:@"userId"];
-    
     [params setObject:token forKey:@"token"];
     [params setObject:userId forKey:@"userId"];
     [self.networkingManager GET:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"%@",responseData);
-        [self.delegate getQiNiuCallBack:responseData];
+        [self saveQiNiuInfo:responseData ImageData:imageData];
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         NSLog(@"%@",error);
     }];
 }
+
+- (void)saveQiNiuInfo:(NSDictionary *)responseData ImageData:(NSData *)imageData{
+    NSLog(@"%@",responseData);
+    [[NSUserDefaults standardUserDefaults] setObject:[responseData objectForKey:@"upToken"] forKey:@"QiNiuToken"];
+    
+    NSString * key = [responseData objectForKey:@"key"];
+    NSString * qiniuToken = [responseData objectForKey:@"upToken"];
+
+    NSString * avatarUrl = [QiNiuDomain stringByAppendingString:[NSString stringWithFormat:@"//%@",key]];
+    [[NSUserDefaults standardUserDefaults] setObject:avatarUrl forKey:@"avatar"];
+    
+    QNUploadManager *upManager = [[QNUploadManager alloc] init];
+    [upManager putData:imageData key:key token:qiniuToken
+              complete: ^(QNResponseInfo *info, NSString *key, NSDictionary *resp) {
+                  NSLog(@"%@", info);
+                  if (info.statusCode == 200) {
+                      [[NSNotificationCenter defaultCenter]postNotificationName:@"UploadAvatarUrl" object:nil];
+                  }
+                  NSLog(@"%@", resp);
+              } option:nil];
+}
+
 
 /*
  *用户登陆 参数为nickname和password
@@ -168,7 +202,7 @@
     NSMutableDictionary * params = [[NSMutableDictionary alloc]init];
     [params setObject:token forKey:@"token"];
     [params setObject:userId forKey:@"userId"];
-    [self.networkingManager GET:urlString parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+    [self.networkingManager GET:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         [self.delegate userLogoutCallBack:responseData];
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
@@ -208,8 +242,6 @@
     NSMutableDictionary * params = [[NSMutableDictionary alloc]init];
     [params setObject:[userDictionary objectForKey:@"token"] forKey:@"token"];
     [params setObject:[userDictionary objectForKey:@"userId"] forKey:@"userId"];
-
-//    {nickName,studentNo,avatar,school,major,clazz,realName,idCard,email,address} userId token
     
     [params setObject:[userDictionary objectForKey:@"avatar"] forKey:@"avatar"];
     [params setObject:[userDictionary objectForKey:@"address"] forKey:@"address"];
@@ -221,35 +253,6 @@
     [params setObject:[userDictionary objectForKey:@"school"] forKey:@"school"];
     [params setObject:[userDictionary objectForKey:@"idCard"] forKey:@"idCard"];
     [params setObject:[userDictionary objectForKey:@"realName"] forKey:@"realName"];
-    
-
-//    @property (strong, nonatomic) NSString * nickName;
-//    @property (strong, nonatomic) NSString * studentNo;
-//    @property (strong, nonatomic) NSString * password;
-//    @property (strong, nonatomic) NSString * salt;
-//    @property (strong, nonatomic) NSString * token;
-//    @property (strong, nonatomic) NSString * avatar;
-//    @property (strong, nonatomic) NSString * school;
-//    @property (strong, nonatomic) NSString * major;
-//    @property (strong, nonatomic) NSString * clazz;
-//    @property (strong, nonatomic) NSString * realName;
-//    @property (strong, nonatomic) NSString * idCard;
-//    @property (strong, nonatomic) NSString * phone;
-//    @property (strong, nonatomic) NSString * email;
-//    @property (strong, nonatomic) NSString * address;
-    
-//    [params setObject:user.avatar forKey:@"avatar"];
-//    [params setObject:user.address forKey:@"address"];
-//    [params setObject:user.clazz forKey:@"clazz"];
-//    [params setObject:user.nickName forKey:@"nickName"];
-//    [params setObject:user.token forKey:@"token"];
-//    [params setObject:user.major forKey:@"major"];
-//    [params setObject:user.password forKey:@"password"];
-//    [params setObject:user.email forKey:@"email"];
-//    [params setObject:user.studentNo forKey:@"studentNo"];
-//    [params setObject:user.school forKey:@"school"];
-//    [params setObject:user.phone forKey:@"phone"];
-//    [params setObject:user.salt forKey:@"salt"];
     
     //更新用户信息
     [self.networkingManager POST:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
@@ -275,11 +278,20 @@
 - (void)getAllPaper {
     NSString * urlString = @"/paper/list";
     urlString = [url stringByAppendingString:urlString];
-    
-    [self.networkingManager GET:urlString parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+    NSMutableDictionary * params = [[NSMutableDictionary alloc]init];
+    NSString * token = [[NSUserDefaults standardUserDefaults]objectForKey:@"token"];
+    NSString * userId = [[NSUserDefaults standardUserDefaults]objectForKey:@"userId"];
+    [params setObject:token forKey:@"token"];
+    [params setObject:userId forKey:@"userId"];
+    [self.networkingManager GET:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        [self.delegate getAllPaperCallBack:responseData];
+//        _cManager = [CacheManager sharedInstance];
+        _cManager = [CacheManager sharedInstance];
+        [_cManager savePaperIntoDB:responseData];
+//        [self.delegate getAllPaperCallBack:responseData];
+        [MBProgressHUD showSuccess:@"加载成功"];
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        [MBProgressHUD showError:@"加载失败"];
         NSLog(@"%@",error);
         NSLog(@"获取所有试卷失败");
     }];
@@ -318,7 +330,7 @@
     NSString * token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
     NSString * userId = [[NSUserDefaults standardUserDefaults] objectForKey:@"userId"];
     [userInfo setObject:token forKey:@"token"];
-    [userInfo setObject:userInfo forKey:@"userId"];
+    [userInfo setObject:userId forKey:@"userId"];
     
     [self.networkingManager POST:urlString parameters:userInfo success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         
@@ -339,7 +351,7 @@ success :   {
 
 error   :
 */
-- (void)addFavourite:(long)questionId {
+- (void)addFavourite:(long)questionId{
     NSString * urlString = @"/question/collect";
     urlString = [url stringByAppendingString:urlString];
     NSString * token = [[NSUserDefaults standardUserDefaults]objectForKey:@"token"];
@@ -352,11 +364,16 @@ error   :
     [params setObject:questionIdNumber forKey:@"questionId"];
     [self.networkingManager POST:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        [self.delegate addFavouriteCallBack:responseData];
+        
+//        NSNotificationCenter
+//        [self.delegate addFavouriteCallBack:responseData];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadFavouriteTableView" object:nil];
+
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         NSLog(@"%@",error);
     }];
 }
+
 /*
  request :   POST    /question/removeCollect
  
@@ -369,7 +386,7 @@ error   :
  
  error   :
  */
-- (void)removeFavourite:(long)questionId {
+- (void)removeFavourite:(long)questionId{
     NSString * urlString = @"/question/removeCollect";
     urlString = [url stringByAppendingString:urlString];
     NSString * token = [[NSUserDefaults standardUserDefaults]objectForKey:@"token"];
@@ -377,11 +394,13 @@ error   :
     NSMutableDictionary * userDictionary = [[NSMutableDictionary alloc]init];
     [userDictionary setObject:token forKey:@"token"];
     [userDictionary setObject:userId forKey:@"userId"];
-    NSNumber * questionIdNumber = [NSNumber numberWithInt:questionId];
+    NSNumber * questionIdNumber = [NSNumber numberWithLong:questionId];
     [userDictionary setObject:questionIdNumber forKey:@"questionId"];
     [self.networkingManager POST:urlString parameters:userDictionary success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        [self.delegate removeFavouriteCallBack:responseData];
+
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadFavouriteTableView" object:nil];
+
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         
     }];
@@ -410,11 +429,17 @@ error   :
     NSMutableDictionary * userDictionary = [[NSMutableDictionary alloc]init];
     [userDictionary setObject:token forKey:@"token"];
     [userDictionary setObject:userId forKey:@"userId"];
-//    [userDictionary setObject:questionId forKey:@"questionId"];
     [self.networkingManager GET:urlString parameters:userDictionary success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"%@",responseData);
-        [self.delegate getallFavouriteCallBack:responseData];
+        
+//        _cManager = [[CacheManager alloc]init];
+//        _cManager.kvs = [[YTKKeyValueStore alloc]initDBWithName:@"SUBCOURSEDB"];
+        [_cManager saveFavourite:responseData];
+//        [self.delegate getallFavouriteCallBack:responseData];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadFavouriteTableView" object:nil];
+        
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         
     }];
@@ -447,6 +472,9 @@ error   :
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"..");
         [self.delegate addQuizCallBack:responseData];
+        
+//        NSNotification
+        
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         
     }];
