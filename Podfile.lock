@@ -35,9 +35,9 @@ PODS:
     - ASIHTTPRequest/Core
   - GPUImage (0.1.7)
   - HappyDNS (0.2.3)
-  - IQKeyboardManager (3.3.4)
+  - IQKeyboardManager (3.3.5)
   - JSONKit (1.5pre)
-  - MJRefresh (2.4.12)
+  - MJRefresh (3.1.0)
   - Qiniu (7.0.16):
     - AFNetworking (~> 2.0)
     - HappyDNS (~> 0.2)
@@ -50,7 +50,7 @@ DEPENDENCIES:
   - GPUImage
   - IQKeyboardManager (~> 3.3.1)
   - JSONKit (~> 1.5pre)
-  - MJRefresh (~> 2.4.10)
+  - MJRefresh
   - Qiniu (~> 7.0)
   - UMengAnalytics-NO-IDFA
 
@@ -59,9 +59,9 @@ SPEC CHECKSUMS:
   ASIHTTPRequest: ec013992946676b7978dcbde6396d57312d21db4
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
   HappyDNS: 6d85942e64c28b4fa61f8c76580398f52d6d1d11
-  IQKeyboardManager: ac803e61e5b50efae6b3aeedd95a02c7c7d3b2b3
+  IQKeyboardManager: 128bcb96b3ec03ff87942cdd7fa7f44491aa3d08
   JSONKit: bae313ce6a6c444f40489a6c0b023f399888871f
-  MJRefresh: ca8e9589895977df32d379d46e6b8a5450b3ff44
+  MJRefresh: 743e6404967d1c2c688472ea3ecfde247d872db4
   Qiniu: 51a8702cddc02b50867e10cef99291b9a8a006b1
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   UMengAnalytics-NO-IDFA: 6d02561a00579b2e37718f204eb81347df5d7b8b

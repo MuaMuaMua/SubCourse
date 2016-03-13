@@ -11,6 +11,10 @@
 #import "User.h"
 #import "CacheManager.h"
 
+typedef void (^ DTZSuccessBlock)(NSDictionary * successBlock);
+
+typedef void (^ DTZFailBlock)(NSDictionary * failBlock);
+
 @protocol SubcourseManagerDelegate <NSObject>
 
 @optional
@@ -115,7 +119,7 @@
 /*
  *获取全部试卷
  */
-- (void)getAllPaper;
+- (void)getAllPaper:(DTZSuccessBlock)dtzSuccessBlock DTZFailBlock:(DTZFailBlock)dtzFailBlock;
 
 /*
  *获取指定标签页面，时间点后的更新的试卷的标签页面
@@ -142,12 +146,12 @@
 /*
  *收藏题目
  */
-- (void)addFavourite:(long)questionId;
+- (void)addFavourite:(long)questionId DTZSuccessBlock:(DTZSuccessBlock)dtzSuccessBlock DTZFailBlock:(DTZFailBlock)dtzFailBlock;
 
 /*
  *取消收藏
  */
-- (void)removeFavourite:(long)questionId;
+- (void)removeFavourite:(long)questionId DTZSuccessBlock:(DTZSuccessBlock)dtzSuccessBlock DTZFailBlock:(DTZFailBlock)dtzFailBlock;
 
 /*
  *获取所有收藏
@@ -163,5 +167,55 @@
  *获取七牛的token字段 上传图片使用
  */
 - (void)getQiNiuToken:(NSData *)imageData;
+
+/*
+ *获取新的Paper
+ */
+- (void)getNewPaper;
+
+//发送验证码
+//
+//request :   POST    /user/sendVerificationCode
+//
+//params  :   {phone : 手机号码}
+//
+//success :   {code : 200 , msg : 发送成功}
+//
+//error   :   {code : 413 , msg : 手机验证码发送失败}
+- (void)sendVerificationCode:(NSString *)phone;
+
+//判断验证码
+//
+//request :   POST    /user/checkVerificationCode
+//
+//params  :   {phone : 手机号码 , code : 验证码}
+//
+//success :   {code : 200 , msg : 验证码正确}
+//
+//error   :   {code : 414 , msg : 验证码过期或无效}
+- (void)checkVerificationCode:(NSString *)phone verifictionCode:(NSString *)code;
+
+//判断手机是否存在
+//
+//request :   GET     /user/isPhoneExist
+//
+//params  :   {phone : 手机号}
+//
+//success :   {code : 200 , msg : 电话存在}
+//
+//error   :   {code : 404 , msg : 电话不存在}
+- (void)isPhoneExist :(NSString *)phone;
+
+//request :   POST    /paper/scan
+//
+//params  :   {url : [url]}
+//
+//success :   {
+//    code : 200
+//    msg  : {paper : [paperModel]}
+//}
+//
+//error   :
+- (void)paperScan:(NSString *)qrUrl;
 
 @end

@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="_backBtn" destination="hin-Zf-LkM" id="v4p-2z-yJv"/>
                 <outlet property="_phoneField" destination="ATt-5g-lf6" id="uAo-pQ-wux"/>
+                <outlet property="_sendVerificationCodeBtn" destination="C5s-vk-8ry" id="ZGi-fZ-9Em"/>
                 <outlet property="_validateBtn" destination="Qn8-xH-vaO" id="t5K-S4-2Sy"/>
                 <outlet property="_validationField" destination="B8L-UL-DEo" id="Knd-EA-y38"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -19,7 +20,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="VALIDATION CODE" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B8L-UL-DEo">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="验证码" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B8L-UL-DEo" customClass="CLLASSTextField">
                     <rect key="frame" x="20" y="309" width="335" height="50"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="3iE-UA-OG7"/>
@@ -45,14 +46,14 @@
                         <action selector="backAction:" destination="-1" eventType="touchUpInside" id="4SK-ld-0v2"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SubCourseIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Hi0-4v-ItU">
-                    <rect key="frame" x="123" y="89" width="130" height="130"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SubcourseIC" translatesAutoresizingMaskIntoConstraints="NO" id="Hi0-4v-ItU">
+                    <rect key="frame" x="128" y="99" width="120" height="120"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="130" id="1Lb-tt-4ZE"/>
-                        <constraint firstAttribute="height" constant="130" id="VvW-lf-Zwg"/>
+                        <constraint firstAttribute="width" constant="120" id="1Lb-tt-4ZE"/>
+                        <constraint firstAttribute="height" constant="120" id="VvW-lf-Zwg"/>
                     </constraints>
                 </imageView>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="PHONE NUMBER" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ATt-5g-lf6">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="电话号码" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ATt-5g-lf6" customClass="CLLASSTextField">
                     <rect key="frame" x="20" y="249" width="335" height="50"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="D09-GB-oX9"/>
@@ -60,12 +61,21 @@
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C5s-vk-8ry">
+                    <rect key="frame" x="290" y="261" width="55" height="26"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                    <state key="normal" title="发送验证码">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="ATt-5g-lf6" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="28k-C9-tHL"/>
                 <constraint firstItem="Qn8-xH-vaO" firstAttribute="top" secondItem="B8L-UL-DEo" secondAttribute="bottom" constant="30" id="Htd-wV-y2j"/>
                 <constraint firstItem="hin-Zf-LkM" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Kw8-35-3Pq"/>
+                <constraint firstItem="C5s-vk-8ry" firstAttribute="centerY" secondItem="ATt-5g-lf6" secondAttribute="centerY" id="OdL-WL-f9G"/>
+                <constraint firstAttribute="trailing" secondItem="C5s-vk-8ry" secondAttribute="trailing" constant="30" id="PnM-X0-se9"/>
                 <constraint firstItem="B8L-UL-DEo" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Pv3-sC-5fD"/>
                 <constraint firstItem="B8L-UL-DEo" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="Qw6-vS-a6s"/>
                 <constraint firstItem="Qn8-xH-vaO" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Tbp-qt-p3k"/>
@@ -82,6 +92,6 @@
         </view>
     </objects>
     <resources>
-        <image name="SubCourseIcon" width="1024" height="1024"/>
+        <image name="SubcourseIC" width="1024" height="1024"/>
     </resources>
 </document>

@@ -28,8 +28,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _passwordAgainField.keyboardType = UIKeyboardTypeNumberPad;
-    _passwordField.keyboardType = UIKeyboardTypeNumberPad;
+//    _passwordAgainField.keyboardType = UIKeyboardTypeNumberPad;
+//    _passwordField.keyboardType = UIKeyboardTypeNumberPad;
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -61,6 +61,11 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
 }
 
 @end

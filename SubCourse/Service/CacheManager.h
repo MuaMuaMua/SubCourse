@@ -89,12 +89,18 @@
 
 - (NSArray *)getAllpaperFromDB ;
 
-- (NSDictionary *)accemblePaperFromDB:(NSDictionary *)paperDictionary; 
+- (NSDictionary *)accemblePaperFromDB:(NSDictionary *)paperDictionary;
 
 - (void)addfavouriteData:(QuestionModel * )questionModel IsFavourite:(BOOL)isFavourite;
 
 - (PaperModel *)getAllFavouriteListFromDB:(NSArray * )paperList;
 
 - (PaperModel *)getFavouriteInFavouriteTable ;
+
+- (void)saveQRPaperIntoDB:(NSDictionary *)paperDictionary;
+
+- (PaperModel *)transformQRPaperDictionary:(NSDictionary *)paperDictionary;
+
+- (PaperModel *)getPaperById:(NSNumber *)paperId;
 
 @end

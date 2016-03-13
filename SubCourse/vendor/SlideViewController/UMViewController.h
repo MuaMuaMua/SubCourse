@@ -14,7 +14,7 @@
 
 @interface UMViewController : UIViewController
 
-@property (unsafe_unretained, nonatomic) UMNavigationController         *navigator;
+@property (strong, nonatomic) UMNavigationController         *navigator;
 @property (strong, nonatomic) NSDictionary                              *params;
 @property (strong, nonatomic) NSDictionary                              *query;
 @property (strong, nonatomic) NSURL                                     *url;

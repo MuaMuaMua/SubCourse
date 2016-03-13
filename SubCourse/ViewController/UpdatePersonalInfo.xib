@@ -33,7 +33,7 @@
                                     <action selector="cancelAction:" destination="-1" id="WMk-1P-f53"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem key="rightBarButtonItem" title="发送" id="kFS-vt-tYk">
+                            <barButtonItem key="rightBarButtonItem" title="保存" id="kFS-vt-tYk">
                                 <color key="tintColor" red="0.16648914279999999" green="1" blue="0.098308009530000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="sendAction:" destination="-1" id="eYW-GC-U88"/>

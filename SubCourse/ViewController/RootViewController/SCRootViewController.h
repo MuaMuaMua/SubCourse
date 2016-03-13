@@ -10,4 +10,10 @@
 
 @interface SCRootViewController : UMViewController
 
+@property (strong, nonatomic) UIBarButtonItem * rightBtn;
+
+@property (strong, nonatomic) UIButton * qrCodeBtn;
+
+- (void)clickQRCodeBtn;
+
 @end

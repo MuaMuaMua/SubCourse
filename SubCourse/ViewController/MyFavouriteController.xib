@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyFavouriteController">
             <connections>
+                <outlet property="_bgView" destination="tkB-Ij-LbV" id="wxD-7f-E1K"/>
                 <outlet property="_tableView" destination="3eo-NH-Pnv" id="QSE-7u-AAn"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -16,20 +17,32 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3eo-NH-Pnv">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tkB-Ij-LbV">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3eo-NH-Pnv">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </tableView>
+                    </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </tableView>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="3eo-NH-Pnv" secondAttribute="trailing" id="EPT-oJ-fHf"/>
+                        <constraint firstItem="3eo-NH-Pnv" firstAttribute="leading" secondItem="tkB-Ij-LbV" secondAttribute="leading" id="Ui0-U1-TZT"/>
+                        <constraint firstItem="3eo-NH-Pnv" firstAttribute="top" secondItem="tkB-Ij-LbV" secondAttribute="top" id="fqb-Df-iYk"/>
+                        <constraint firstAttribute="bottom" secondItem="3eo-NH-Pnv" secondAttribute="bottom" id="m3R-yh-Mh3"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="3eo-NH-Pnv" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="1vZ-93-vSM"/>
-                <constraint firstAttribute="trailing" secondItem="3eo-NH-Pnv" secondAttribute="trailing" id="Rec-9b-p8I"/>
-                <constraint firstItem="3eo-NH-Pnv" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Y2V-nm-6Pe"/>
-                <constraint firstAttribute="bottom" secondItem="3eo-NH-Pnv" secondAttribute="bottom" id="lfH-cv-Fjc"/>
+                <constraint firstItem="tkB-Ij-LbV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="EDu-Rh-TBo"/>
+                <constraint firstAttribute="trailing" secondItem="tkB-Ij-LbV" secondAttribute="trailing" id="T8l-Uy-oDH"/>
+                <constraint firstItem="tkB-Ij-LbV" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="jYy-ui-gQe"/>
+                <constraint firstAttribute="bottom" secondItem="tkB-Ij-LbV" secondAttribute="bottom" id="o2M-Bc-oc7"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-            <point key="canvasLocation" x="66.5" y="393.5"/>
+            <point key="canvasLocation" x="-21.5" y="367.5"/>
         </view>
     </objects>
 </document>

@@ -19,5 +19,9 @@
 
 @property (strong, nonatomic) NSMutableArray * dataList;
 @property (strong, nonatomic) NSMutableArray * searchList;
+@property (strong, nonatomic) NSMutableArray * chapterNewArray;
+@property BOOL isSearchbarFirstResponder;
+@property BOOL isCancelClick;
+//@property (strong, nonatomic) NSMutableArray *
 
 @end

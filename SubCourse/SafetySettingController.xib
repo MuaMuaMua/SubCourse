@@ -16,15 +16,15 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="mye-j9-7lB">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="2" translatesAutoresizingMaskIntoConstraints="NO" id="mye-j9-7lB">
+                    <rect key="frame" x="0.0" y="-1" width="600" height="601"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="mye-j9-7lB" secondAttribute="bottom" id="B3A-Zg-uQI"/>
-                <constraint firstItem="mye-j9-7lB" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="D6E-5l-6nj"/>
+                <constraint firstItem="mye-j9-7lB" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="-1" id="D6E-5l-6nj"/>
                 <constraint firstItem="mye-j9-7lB" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="NZJ-Es-TBc"/>
                 <constraint firstAttribute="trailing" secondItem="mye-j9-7lB" secondAttribute="trailing" id="pU1-yE-gWc"/>
             </constraints>

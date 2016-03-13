@@ -39,6 +39,7 @@
     [self scManagerSetting];
     [self setTableView];
     _rightBtn.enabled = NO;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,8 +47,35 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    _navigationItem.title = self.titleText;
-    
+//    _navigationItem.title = self.titleText;
+    switch (self.type) {
+        case 0:
+            _navigationItem.title = @"昵称";
+            break;
+        case 1:
+            _navigationItem.title = @"学号";
+            break;
+        case 2:
+            _navigationItem.title = @"学校";
+            break;
+        case 3:
+            _navigationItem.title = @"班级";
+            break;
+        case 4:
+            _navigationItem.title = @"真实姓名";
+            break;
+        case 5:
+            _navigationItem.title = @"证件号码";
+            break;
+        case 7:
+            _navigationItem.title = @"e-mail";
+            break;
+        case 8:
+            _navigationItem.title = @"地址";
+            break;
+        default:
+            break;
+    }
 }
 
 - (IBAction)cancelAction:(id)sender {
@@ -102,45 +130,8 @@
     return _cell;
 }
 
-//- (CGFloat )tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-//    return 20;
-//}
-
 - (IBAction)sendAction:(id)sender {
-//    UpdatePersonalInfo * updatePersonalInfo = [[UpdatePersonalInfo alloc]init];
-//    if (indexPath.row == 1 && indexPath.section == 0) {
-//        //修改个人昵称.
-//        updatePersonalInfo.type = @"0";
-//    }else if(indexPath.row == 2 && indexPath.section == 0) {
-//        //修改学号
-//        updatePersonalInfo.type = @"1";
-//    }else if(indexPath.section == 1){
-//        if(indexPath.row == 0) {
-//            //修改学校信息
-//            updatePersonalInfo.type = @"2";
-//        }else if(indexPath.row == 1) {
-//            //修改班级信息
-//            updatePersonalInfo.type = @"3";
-//        }
-//    }else if(indexPath.section == 2){
-//        if(indexPath.row == 0) {
-//            //修改真实姓名
-//            updatePersonalInfo.type = @"4";
-//        }else if(indexPath.row == 1) {
-//            //修改证件号码
-//            updatePersonalInfo.type = @"5";
-//        }else if(indexPath.row == 2) {
-//            //修改联系电话
-//            updatePersonalInfo.type = @"6";
-//        }else if(indexPath.row == 3) {
-//            //修改邮箱地址
-//            updatePersonalInfo.type = @"7";
-//        }else if(indexPath.row == 4) {
-//            //修改家庭住址
-//            updatePersonalInfo.type = @"8";
-//        }
-//    }
-//    {avatar,school,major,clazz,realName,idCard,phone,email,address} TOKEN , userId
+
     NSMutableDictionary * userDictionary = [[NSMutableDictionary alloc]init];
     NSString * token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
     NSString * userId = [[NSUserDefaults standardUserDefaults] objectForKey:@"userId"];
@@ -240,10 +231,6 @@
         //修改个人idcard
         [userDictionary setObject:_cell.updateTextField.text forKey:@"idCard"];
     }
-//    else if([self.type isEqualToString:@"6"]) {
-//        //修改联系方式
-//        [userDictionary setObject:_cell.updateTextField.text forKey:@"nickName"];
-//    }
     
     else if(self.type == 7) {
         //修改邮箱地址
@@ -255,9 +242,6 @@
     
     [_scManager updateUserInfo:userDictionary];
     
-//    _scManager updateUserInfo:
-    
-    
 }
 
 - (void)updateUserInfoCallBack:(NSDictionary *)responseData {
@@ -268,7 +252,7 @@
     if (code.intValue == 200) {
         switch (self.type) {
             case 0:
-                [[NSUserDefaults standardUserDefaults] setObject:_cell.updateTextField.text forKey:@"nickname"];
+                [[NSUserDefaults standardUserDefaults] setObject:_cell.updateTextField.text forKey:@"nickName"];
                 break;
             case 1:
                 [[NSUserDefaults standardUserDefaults] setObject:_cell.updateTextField.text forKey:@"studentNo"];
@@ -303,33 +287,6 @@
         [MBProgressHUD showError:@"网络故障，请求失败"];
     }
     
-    
-//    if(self.type == 0) {
-//        //修改个人昵称
-//        [[NSUserDefaults standardUserDefaults] setObject:_cell.updateTextField.text forKey:@"nickname"];
-//    }else if(self.type == 1) {
-//        //修改个人学号
-//        [[NSUserDefaults standardUserDefaults] setObject:_cell.updateTextField.text forKey:@"studentNo"];
-//    }else if(self.type == 2) {
-//        //修改个人学校
-//        [[NSUserDefaults standardUserDefaults] setObject:_cell.updateTextField.text forKey:@"school"];
-//    }else if(self.type == 3) {
-//        //修改个人班级
-//        [[NSUserDefaults standardUserDefaults] setObject:_cell.updateTextField.text forKey:@"clazz"];
-//    }else if(self.type == 4) {
-//        //修改个人真实姓名
-//        [[NSUserDefaults standardUserDefaults] setObject:_cell.updateTextField.text forKey:@"realName"];
-//    }else if(self.type == 5) {
-//        //修改个人idcard
-//        [[NSUserDefaults standardUserDefaults] setObject:_cell.updateTextField.text forKey:@"idCard"];
-//    }else if(self.type == 7) {
-//        //修改邮箱地址
-//        [[NSUserDefaults standardUserDefaults] setObject:_cell.updateTextField.text forKey:@"email"];
-//    }else if(self.type == 8) {
-//        //修改家庭住址
-//        [[NSUserDefaults standardUserDefaults] setObject:_cell.updateTextField.text forKey:@"address"];
-//    }
-
 }
 
 - (void)enableSendBtn:(BOOL)enable {
@@ -339,4 +296,5 @@
         _rightBtn.enabled = NO;
     }
 }
+
 @end

@@ -8,6 +8,12 @@
 
 #import "QRCodeViewController.h"
 #import "ZBarSDK.h"
+#import "SubcourseManager.h"
+#import "PaperModel.h"
+#import "CacheManager.h"
+#import "SCPageViewController.h"
+#import <AVFoundation/AVFoundation.h>
+#import "QRCodeReader.h"
 
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width
 #define ScreenHeight [UIScreen mainScreen].bounds.size.height
@@ -18,7 +24,7 @@
 #define DARKCOLOR_ALPHA 0.5 //深色透明度
 #define winSize [[UIScreen mainScreen]bounds]
 
-@interface QRCodeViewController ()<ZBarReaderViewDelegate>{
+@interface QRCodeViewController ()<ZBarReaderViewDelegate,SubcourseManagerDelegate,AVCaptureMetadataOutputObjectsDelegate>{
     UIView *_QrCodeline;
     NSTimer *_timer;
     //设置扫描画面
@@ -26,41 +32,105 @@
     ZBarReaderView *_readerView;
     NSString *   _symbolStr;
 //    CGFloat SCANVIEW_EdgeTop;
+    SubcourseManager * _scManager;
     BOOL up;
+    CacheManager * _cManager;
     //NSString *_symbolStr;}
+    AVCaptureSession * session;//输入输出的中间桥梁
 }
 @end
 
 @implementation QRCodeViewController
 	
-- ( void )viewDidLoad
-{
+- ( void )viewDidLoad{
     [ super viewDidLoad ];
-    up = NO;
-//    SCANVIEW_EdgeTop = SCANVIEW_EdgeTopRate * ScreenHeight;
-    self.presentedViewController.view.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+//    if ([QRCodeReader supportsMetadataObjectTypes:@[AVMetadataObjectTypeQRCode]]) {
+//        up = NO;
+//    //    [self setupAVComponents];
+//        QRCodeReader *reader = [QRCodeReader readerWithMetadataObjectTypes:@[AVMetadataObjectTypeQRCode]];
+//        [self.view.layer insertSublayer:reader.previewLayer atIndex:0];
+//
+//        self.presentedViewController.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+//    }
 }
+
+//- (void)setupAVComponents
+//{
+//    self.defaultDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+//    
+////    self.defaultDevice.
+//    if (_defaultDevice) {
+//        self.defaultDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:_defaultDevice error:nil];
+//        self.metadataOutput     = [[AVCaptureMetadataOutput alloc] init];
+//        self.session            = [[AVCaptureSession alloc] init];
+//        self.previewLayer       = [AVCaptureVideoPreviewLayer layerWithSession:self.session];
+//        
+//        for (AVCaptureDevice *device in [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo]) {
+//            if (device.position == AVCaptureDevicePositionFront) {
+//                self.frontDevice = device;
+//            }
+//        }
+//        if (_frontDevice) {
+//            self.frontDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:_frontDevice error:nil];
+//        }
+//    }
+//}
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];
     //currentVC.view.top = -20.0f;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(QrCodePaper:) name:@"QrCodePaper" object:nil];
     self.title = @"扫描二维码" ;
     self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
     [self.navigationController.navigationBar setHidden:NO];
     //初始化扫描界面
-    [ self setScanView ];
+    [self setupScManager];
+    [self setScanView];
     _readerView = [[ ZBarReaderView alloc ] init ];
-    _readerView . frame = CGRectMake ( 0 , 64 - 20 , ScreenWidth , ScreenHeight);
+    _readerView . frame = CGRectMake ( 0 , 0 , self.view.frame.size.width , self.view.frame.size.height);
     _readerView . tracksSymbols = NO ;
     _readerView . readerDelegate = self ;
     [ _readerView addSubview : _scanView ];
     //关闭闪光灯
     _readerView . torchMode = 0 ;
-    [ self . view addSubview : _readerView ];
+    [self . view addSubview : _readerView];
     //扫描区域
     //readerView.scanCrop =
     [ _readerView start ];
     [ self createTimer ];
+
+}
+
+#pragma mark - AVCaptureMetadataOutputObjectsDelegate
+-(void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects
+      fromConnection:(AVCaptureConnection *)connection
+{
+    if (metadataObjects != nil && [metadataObjects count] > 0) {
+        AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
+        NSString *result;
+        if ([[metadataObj type] isEqualToString:AVMetadataObjectTypeQRCode]) {
+            result = metadataObj.stringValue;
+        } else {
+            NSLog(@"不是二维码");
+        }
+//        [self performSelectorOnMainThread:@selector(reportScanResult:) withObject:result waitUntilDone:NO];
+    }
+}
+
+- (void)QrCodePaper:(NSNotification *)notification {
+    NSMutableDictionary * paperDictionary = [notification object];
+    NSDictionary * paperDic = [_cManager accemblePaperFromDB:paperDictionary];
+    PaperModel * paperModel = [_cManager transformQRPaperDictionary:paperDic];
+    SCPageViewController * scpvc = [[SCPageViewController alloc]init];
+    scpvc.paperModel = paperModel;
+    [scpvc initPageViewController];
+    [self presentViewController:scpvc animated:YES completion:nil];
+}
+
+- (void)setupScManager {
+    _scManager = [SubcourseManager sharedInstance];
+    _scManager.delegate = self;
+    _cManager = [CacheManager sharedInstance];
 }
 
 #pragma mark -- ZBarReaderViewDelegate
@@ -89,25 +159,26 @@
         //[MBProgressHUD showSuccess:[arrInfoFoot objectAtIndex : 1 ]];
     }
     
+    [_scManager paperScan:_symbolStr];
     //根据_symbolStr进行判断
-    if(_symbolStr.length != 13){
-        //如果回调得到的二维码的长度不等于13 的部分
-        UIAlertView *alertView=[[ UIAlertView alloc ] initWithTitle : @"无效二维码" message :_symbolStr delegate : nil cancelButtonTitle : @"取消" otherButtonTitles : nil ];
-        [alertView show ];
-    }else{
-        NSString *codeString = [_symbolStr substringFromIndex:10];
-        int code = [codeString intValue];
-        if (code < 0) {
-            UIAlertView *alertView=[[ UIAlertView alloc ] initWithTitle : @"无法识别此二维码" message :codeString delegate : nil cancelButtonTitle : @"取消" otherButtonTitles : nil ];
-            [alertView show ];
-        }else{
-        // 直接跳转到具体的试卷的第一页的第一题
-//            UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"二维码扫描成功" message:codeString delegate:nil
-//        cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-//            [alertView show];
-            
-        }
-    }
+//    if(_symbolStr.length != 13){
+//        //如果回调得到的二维码的长度不等于13 的部分
+//        UIAlertView *alertView=[[ UIAlertView alloc ] initWithTitle : @"无效二维码" message :_symbolStr delegate : nil cancelButtonTitle : @"取消" otherButtonTitles : nil ];
+//        [alertView show ];
+//    }else{
+//        NSString *codeString = [_symbolStr substringFromIndex:10];
+//        int code = [codeString intValue];
+//        if (code < 0) {
+//            UIAlertView *alertView=[[ UIAlertView alloc ] initWithTitle : @"无法识别此二维码" message :codeString delegate : nil cancelButtonTitle : @"取消" otherButtonTitles : nil ];
+//            [alertView show ];
+//        }else{
+//        // 直接跳转到具体的试卷的第一页的第一题
+////            UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"二维码扫描成功" message:codeString delegate:nil
+////        cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+////            [alertView show];
+//            
+//        }
+//    }
 }
 
 #pragma mark - 跳转到具体的题目的vc
@@ -127,8 +198,9 @@
 //二维码的扫描区域
 - ( void )setScanView
 {
-    _scanView =[[ UIView alloc ] initWithFrame : CGRectMake ( 0 , 0 , ScreenWidth , ScreenHeight - 64 )];
+    _scanView =[[ UIView alloc ] initWithFrame : CGRectMake ( 0 , 0 , self.view.frame.size.width , self.view.frame.size.height )];
     _scanView . backgroundColor =[ UIColor clearColor ];
+    
     //最上部view
     UIView * upView = [[ UIView alloc ] initWithFrame : CGRectMake ( 0 , 0 , ScreenWidth , SCANVIEW_EdgeTop )];
     upView. alpha = TINTCOLOR_ALPHA ;
@@ -188,6 +260,7 @@
     }
     [ self stopTimer ];
     [ _readerView stop ];
+    [self.qrDelegate qrBackToList];
 }
 
 
@@ -228,5 +301,6 @@
     [ super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 @end

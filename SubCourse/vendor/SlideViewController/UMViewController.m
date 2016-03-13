@@ -45,8 +45,7 @@
     return self;
 }
 
-- (void)openedFromViewControllerWithURL:(NSURL *)aUrl
-{
+- (void)openedFromViewControllerWithURL:(NSURL *)aUrl{
 }
 
 - (BOOL)shouldOpenViewControllerWithURL:(NSURL *)aUrl

@@ -15,11 +15,16 @@
 #import "LoginViewcontroller.h"
 #import "SubcourseManager.h"
 #import "CacheManager.h"
-
+//#import "WechatAuthSDK.h"
+//#import "WXApi.h"
 #define newPaperTablename @"newPaperTablename"
 #define newQuestionTable @"questionTablename"
 #define favouriteTabel @"favouriteTable"
 #define newFavouriteListTable @"newFavouriteListTable"
+#define WX_APP_ID @"wx2fdedcbd7e0d4624"
+#define WX_APP_SECRET @"2219926324b576653cf3386ffeea046c"
+#import "SettingVC.h"
+#import "AboutCllassVC.h"
 
 
 @interface AppDelegate () <SubcourseManagerDelegate>{
@@ -35,13 +40,8 @@
     
 //    [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];//注册本地推送
 //    [self getQiNiuToken];
-//    _cManager = [CacheManager sharedInstance];
-//    
-//    [_cManager.kvs clearTable:newFavouriteListTable];
-//    [_cManager.kvs clearTable:newPaperTablename];
-//    [_cManager.kvs clearTable:newQuestionTable];
-//    [_cManager.kvs clearTable:favouriteTabel];
-    
+//    [WXApi registerApp:WX_APP_ID];
+
     NSString * phoneNumber = [[NSUserDefaults standardUserDefaults] objectForKey:@"phone"];
     if (phoneNumber != nil && ![phoneNumber isEqualToString:@""]) {
         //判定之前是否登录了，登录过，在nsuserDefaults中保存登陆信息、token、phoneNumber、学号、昵称、信息
@@ -53,16 +53,6 @@
     // Override point for customization after application launch.
     return YES;
 }
-//
-//- (void)getQiNiuToken {
-//    _scManager = [SubcourseManager sharedInstance];
-//    _scManager.delegate = self;
-//    [_scManager getQiNiuToken];
-//}
-
-//- (void)getQiNiuCallBack:(NSDictionary *)responseData {
-//
-//}
 
 - (void)showLoginView {
     LoginViewcontroller * loginVC = [[LoginViewcontroller alloc]init];
@@ -100,7 +90,7 @@
                                                                      @"MyFavouriteController", @"SC://MyFavourite",
 //                                                                     @"MyQuestionController",@"SC://MyQuestion",
                                                                      @"SafetySettingController", @"SC://Safe",
-                                                                     @"PasswordSettingControllerViewController",@"SC://PasswordSetting",
+                                                                     @"AboutCllassVC",@"SC://PasswordSetting",
                                                                      //还有一行是  注销的不同的section
                                                                     nil]];
 }
@@ -171,6 +161,21 @@
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
+//- (BOOL) application : (UIApplication *)application handleOpenURL:(nonnull NSURL *)url {
+////    return [WXApi handleOpenURL:url delegate:self];
+//    
+////    SourceController *ccontroller =[[SourceController alloc] init];
+////    return  [WXApi handleOpenURL:url delegate:ccontroller];
+//}
+
+//- (BOOL) application:(UIApplication *)application Url:(NSURL *)url String:(NSString *)string AnyObject:(id)annotation{
+//    return [WXApi handleOpenURL:url delegate:self];
+//}
+
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+////    return [WXApi handleOpenURL:url delegate:self];
+//}
+
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -187,5 +192,42 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+//- (void) onReq:(BaseReq *)req{
+//    
+//}
+//
+//- (void) onResp:(BaseResp *)resp{
+//    if ([resp isKindOfClass:[SendMessageToWXResp class]]) {
+//    }else if(resp.errCode == 0){
+//        NSString * code = [resp valueForKey:@"code"];
+//        if (code != nil) {
+//            NSString * s1 = @"https://api.weixin.qq.com/sns/oauth2/access_token?appid=";
+//            s1 = [s1 stringByAppendingString:WX_APP_ID];
+//            s1 = [s1 stringByAppendingString:@"&secret="];
+//            s1 = [s1 stringByAppendingString:WX_APP_SECRET];
+//            s1 = [s1 stringByAppendingString:@"&code="];
+//            s1 = [s1 stringByAppendingString:code];
+//            s1 = [s1 stringByAppendingString:@"&grant_type=authorization_code"];
+//            NSURL * url = [NSURL URLWithString:s1];
+//            
+//            NSURLSessionTask * task = [[NSURLSession sharedSession]dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//                NSDictionary* value = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+//                if (![value objectForKey:@"errcode"]) {
+//                    NSString * access_token = [[value objectForKey:@"access_token"]string] ;;
+//                    NSNumber  *expires_in = [NSNumber numberWithInteger:[[value objectForKey:@"expires_in"]integerValue]];
+//                    NSString * openid = [[value objectForKey:@"openid"]string];
+//                    NSDictionary * dictionary = [[NSDictionary alloc]init];
+//                    [dictionary setValue:openid forKey:@"openid"];
+//                    [dictionary setValue:access_token forKey:@"access_token"];
+//                    [dictionary setValue:expires_in forKey:@"expires_in"];
+//                    [[NSNotificationCenter defaultCenter]postNotificationName:@"Oauth2Back" object:nil userInfo:dictionary];
+//                }
+//            }];
+//            [task resume];
+//        }
+//    }
+//    
+//}
 
 @end

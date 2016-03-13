@@ -8,9 +8,11 @@
 
 #import "SCRootViewController.h"
 #import "AppDelegate.h"
+#import "QRCodeViewController.h"
 
 @interface SCRootViewController (){
     AppDelegate * _appDelegate;
+//    UIBarButtonItem * _rightBtn;
 }
 
 @end
@@ -35,20 +37,35 @@
     [navigationLeftBtn addTarget:_appDelegate.slideNavigator action:@selector(slideButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem * leftItem = [[UIBarButtonItem alloc]initWithCustomView:navigationLeftBtn];
     self.navigationItem.leftBarButtonItem = leftItem;
+    
+    self.qrCodeBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+    [self.qrCodeBtn setImage:[UIImage imageNamed:@"QRCode"] forState:UIControlStateNormal];
+
+    [self.qrCodeBtn addTarget:self action:@selector(clickQRCodeBtn) forControlEvents:UIControlEventTouchUpInside];
+    _rightBtn = [[UIBarButtonItem alloc]initWithCustomView:self.qrCodeBtn];
+//    _rightBtn.customView setHidden:
+    self.navigationItem.rightBarButtonItem = _rightBtn;
 }
 
 - (void)clickLeftBtn {
     
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+//- (void)clickQRCodeBtn {
+//    NSString * mediaType = AVMediaTypeVideo;
+//    AVAuthorizationStatus authorizationStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
+//    if (authorizationStatus == AVAuthorizationStatusRestricted|| authorizationStatus == AVAuthorizationStatusDenied) {
+//        UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"摄像头访问受限" message:nil preferredStyle:UIAlertControllerStyleAlert];
+//        [self presentViewController:alertC animated:YES completion:nil];
+//        UIAlertAction * action = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+//            [self dismissViewControllerAnimated:YES completion:nil];
+//        }];
+//        [alertC addAction:action];
+//    }else{
+//        QRCodeViewController * qrcvc = [[QRCodeViewController alloc]init];
+//        //    [self presentViewController:qrcvc animated:YES completion:nil];
+//        [self.navigationController pushViewController:qrcvc animated:YES];
+//    }
+//}
 
 @end

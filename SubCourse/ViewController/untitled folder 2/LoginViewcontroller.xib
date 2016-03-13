@@ -20,17 +20,9 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="PASSWORD" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ywh-6C-9Vv">
-                    <rect key="frame" x="20" y="309" width="335" height="50"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="50" id="tWy-eD-mNG"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bM6-8J-ej0">
-                    <rect key="frame" x="158" y="389" width="58" height="30"/>
-                    <state key="normal" title="SIGN  IN">
+                    <rect key="frame" x="170" y="389" width="34" height="30"/>
+                    <state key="normal" title="登 陆">
                         <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                     <connections>
@@ -48,28 +40,36 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3iN-kj-sZh">
-                    <rect key="frame" x="94" y="571" width="187" height="30"/>
-                    <state key="normal" title="SIGN UP FOR SUBCOURSE">
+                    <rect key="frame" x="171" y="571" width="34" height="30"/>
+                    <state key="normal" title="注 册">
                         <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
                         <action selector="signupAction:" destination="-1" eventType="touchUpInside" id="rCI-Yq-bPV"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SubCourseIcon" translatesAutoresizingMaskIntoConstraints="NO" id="cAj-FN-6aD">
-                    <rect key="frame" x="122" y="89" width="130" height="130"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="130" id="F4I-dy-dFH"/>
-                        <constraint firstAttribute="width" constant="130" id="KvZ-BS-VEK"/>
-                    </constraints>
-                </imageView>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="PHONE NUMBER" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pzy-eh-dUU">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="手机号码" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pzy-eh-dUU" customClass="CLLASSTextField">
                     <rect key="frame" x="20" y="249" width="335" height="50"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="dtj-Kk-Aub"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                </textField>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SubcourseIC" translatesAutoresizingMaskIntoConstraints="NO" id="cAj-FN-6aD">
+                    <rect key="frame" x="127" y="99" width="120" height="120"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="120" id="F4I-dy-dFH"/>
+                        <constraint firstAttribute="width" constant="120" id="KvZ-BS-VEK"/>
+                    </constraints>
+                </imageView>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="密码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ywh-6C-9Vv" customClass="CLLASSTextField">
+                    <rect key="frame" x="20" y="309" width="335" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="tWy-eD-mNG"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                 </textField>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -92,10 +92,10 @@
                 <constraint firstItem="pzy-eh-dUU" firstAttribute="top" secondItem="cAj-FN-6aD" secondAttribute="bottom" constant="30" id="u7T-6D-Wdv"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-            <point key="canvasLocation" x="474.5" y="433.5"/>
+            <point key="canvasLocation" x="228.5" y="460.5"/>
         </view>
     </objects>
     <resources>
-        <image name="SubCourseIcon" width="1024" height="1024"/>
+        <image name="SubcourseIC" width="1024" height="1024"/>
     </resources>
 </document>

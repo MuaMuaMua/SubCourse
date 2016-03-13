@@ -20,5 +20,10 @@
 @property BOOL isFavourite;
 @property BOOL isQuiz;
 @property (strong, nonatomic) NSString * paperTitle;
+@property (strong, nonatomic) NSString * partTitle;
+@property (strong, nonatomic) NSNumber * partId;
+@property (strong, nonatomic) NSNumber * questionNumber;
+@property (strong, nonatomic) NSNumber * paperId;
+@property (strong, nonatomic) NSNumber * partNumber;
 
 @end

@@ -8,8 +8,6 @@
 
 #import "UMViewController.h"
 #import "SCRootViewController.h"
-@interface PasswordSettingControllerViewController :SCRootViewController
-
-
+@interface PasswordSettingControllerViewController :UIViewController
 
 @end

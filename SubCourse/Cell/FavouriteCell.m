@@ -9,10 +9,6 @@
 #import "FavouriteCell.h"
 
 @implementation FavouriteCell{
-
-    IBOutlet UILabel *_titleLabel;
-    
-    IBOutlet UILabel *_dateLabel;
     
 }
 

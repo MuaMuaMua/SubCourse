@@ -100,12 +100,12 @@
         
         CGFloat deltaH = [self heightForContentBreakView];
         // 刚刷新完毕
-        if (MJRefreshStateRefreshing == oldState && deltaH > 0 && self.scrollView.totalDataCount != self.lastRefreshCount) {
+        if (MJRefreshStateRefreshing == oldState && deltaH > 0 && self.scrollView.mj_totalDataCount != self.lastRefreshCount) {
             self.scrollView.mj_offsetY = self.scrollView.mj_offsetY;
         }
     } else if (state == MJRefreshStateRefreshing) {
         // 记录刷新前的数量
-        self.lastRefreshCount = self.scrollView.totalDataCount;
+        self.lastRefreshCount = self.scrollView.mj_totalDataCount;
         
         [UIView animateWithDuration:MJRefreshFastAnimationDuration animations:^{
             CGFloat bottom = self.mj_h + self.scrollViewOriginalInset.bottom;
@@ -116,6 +116,7 @@
             self.lastBottomDelta = bottom - self.scrollView.mj_insetB;
             self.scrollView.mj_insetB = bottom;
             self.scrollView.mj_offsetY = [self happenOffsetY] + self.mj_h;
+            self.scrollView.backgroundColor = [UIColor blackColor];
         } completion:^(BOOL finished) {
             [self executeRefreshingCallback];
         }];

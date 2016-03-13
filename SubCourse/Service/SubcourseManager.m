@@ -13,18 +13,17 @@
 #import "CacheManager.h"
 #import "MBProgressHUD+MJ.h"
 #import "MBProgressHUD.h"
+#import "AppDelegate.h"
 
 #define url @"http://121.42.205.101:9000"
 #define QiNiuDomain @"http://7xp8cz.com1.z0.glb.clouddn.com"
-
-
-//http://7xnpl8.com1.z0.glb.clouddn.com/4d33b9a1-d_1452091318822
-//zQIAAIGcHD9l3SYU    http://7xp8cz.com1.z0.glb.clouddn.com/a91721ea-f_1452097928768
-
-//http://7xnpl8.com1.z0.glb.clouddn.com/fd4c5a4c-9_1452096442875
+#define newPaperTablename @"newPaperTablename"
+#define newQuestionTable @"questionTablename"
+#define favouriteTabel @"favouriteTable"
+#define newFavouriteListTable @"newFavouriteListTable"
 
 @implementation SubcourseManager{
-    
+    AppDelegate * _appDelegate;
 }
 
 + (SubcourseManager *)sharedInstance {
@@ -49,6 +48,84 @@
     return self;
 }
 
+//发送验证码
+//
+//request :   POST    /user/sendVerificationCode
+//
+//params  :   {phone : 手机号码}
+//
+//success :   {code : 200 , msg : 发送成功}
+//
+//error   :   {code : 413 , msg : 手机验证码发送失败}
+- (void)sendVerificationCode:(NSString *)phone {
+    NSString * urlString = @"/user/sendVerificationCode";
+    urlString = [url stringByAppendingString:urlString];
+    NSMutableDictionary * params = [[NSMutableDictionary alloc]init];
+    [params setObject:phone forKey:@"phone"];
+    [self.networkingManager POST:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",responseData);
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"sendVeritificationCode" object:nil];
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        NSLog(@"error !%@",error);
+        NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:error options:NSJSONReadingMutableContainers error:nil];
+    }];
+}
+
+//判断验证码
+//
+//request :   POST    /user/checkVerificationCode
+//
+//params  :   {phone : 手机号码 , code : 验证码}
+//
+//success :   {code : 200 , msg : 验证码正确}
+//
+//error   :   {code : 414 , msg : 验证码过期或无效}
+- (void)checkVerificationCode:(NSString *)phone verifictionCode:(NSString *)code {
+    NSString * urlString = @"/user/checkVerificationCode";
+    urlString = [url stringByAppendingString:urlString];
+    NSMutableDictionary * params = [[NSMutableDictionary alloc]init];
+    [params setObject:phone forKey:@"phone"];
+    [params setObject:code forKey:@"code"];
+    [self.networkingManager POST:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",responseData);
+        NSNumber * code = [responseData objectForKey:@"code"];
+        if (code.longValue == 200) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"validateSuccess" object:nil];
+        }else {
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"validateFail" object:nil];
+        }
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        NSLog(@"error !%@",error);
+        NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:error options:NSJSONReadingMutableContainers error:nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"validateFail" object:nil];
+    }];
+}
+
+//判断手机是否存在
+//
+//request :   GET     /user/isPhoneExist
+//
+//params  :   {phone : 手机号}
+//
+//success :   {code : 200 , msg : 电话存在}
+//
+//error   :   {code : 404 , msg : 电话不存在}
+- (void)isPhoneExist :(NSString *)phone{
+    NSString * urlString = @"/user/isPhoneExist";
+    urlString = [url stringByAppendingString:urlString];
+    NSMutableDictionary * params = [[NSMutableDictionary alloc]init];
+    [params setObject:phone forKey:@"phone"];
+    [self.networkingManager POST:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"rightPhone" object:nil];
+        NSLog(@"%@",responseData);
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        NSLog(@"error !%@",error);
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"wrongPhone" object:nil];
+    }];
+}
 
 /*
  *判断学生学号是否存在
@@ -86,6 +163,9 @@
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         NSLog(@"error 大兄弟");
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:error options:NSJSONReadingMutableContainers error:nil];
+        
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"registerError" object:nil];
     }];
 }
 
@@ -190,6 +270,10 @@
     }];
 }
 
+//- (void)loginSuccess {
+//    
+//}
+
 /*
  *用户登出（需要带上token，userId）
  */
@@ -204,9 +288,24 @@
     [params setObject:userId forKey:@"userId"];
     [self.networkingManager GET:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        [self.delegate userLogoutCallBack:responseData];
+//        [self.delegate userLogoutCallBack:responseData];
+        
+        [self logoutSetting];
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
     }];
+}
+
+- (void)logoutSetting {
+    [_cManager.kvs clearTable:newFavouriteListTable];
+    [_cManager.kvs clearTable:newPaperTablename];
+    [_cManager.kvs clearTable:newQuestionTable];
+    [_cManager.kvs clearTable:favouriteTabel];
+//    NSLog(@"%@",responseData);
+    [MBProgressHUD showSuccess:@"注销成功"];
+    NSString*appDomain = [[NSBundle mainBundle]bundleIdentifier];
+    [[NSUserDefaults standardUserDefaults]removePersistentDomainForName:appDomain];
+    _appDelegate = [[UIApplication sharedApplication]delegate];
+    [_appDelegate showLoginView];
 }
 
 /*
@@ -275,7 +374,7 @@
      paperList : [paperModel 数组。  paper包含多个part,part包含多个quesion]
  }
  */
-- (void)getAllPaper {
+- (void)getAllPaper:(DTZSuccessBlock)dtzSuccessBlock DTZFailBlock:(DTZFailBlock)dtzFailBlock {
     NSString * urlString = @"/paper/list";
     urlString = [url stringByAppendingString:urlString];
     NSMutableDictionary * params = [[NSMutableDictionary alloc]init];
@@ -285,13 +384,13 @@
     [params setObject:userId forKey:@"userId"];
     [self.networkingManager GET:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-//        _cManager = [CacheManager sharedInstance];
+        [[NSUserDefaults standardUserDefaults]setObject:[responseData objectForKey:@"synTime"] forKey:@"createTime"];
+//        [self getAllFavourite];
+        dtzSuccessBlock(responseData);
         _cManager = [CacheManager sharedInstance];
         [_cManager savePaperIntoDB:responseData];
-//        [self.delegate getAllPaperCallBack:responseData];
-        [MBProgressHUD showSuccess:@"加载成功"];
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-        [MBProgressHUD showError:@"加载失败"];
+        [MBProgressHUD showError:@"加载失败，服务器崩溃"];
         NSLog(@"%@",error);
         NSLog(@"获取所有试卷失败");
     }];
@@ -351,7 +450,7 @@ success :   {
 
 error   :
 */
-- (void)addFavourite:(long)questionId{
+- (void)addFavourite:(long)questionId DTZSuccessBlock:(DTZSuccessBlock)dtzSuccessBlock DTZFailBlock:(DTZFailBlock)dtzFailBlock {
     NSString * urlString = @"/question/collect";
     urlString = [url stringByAppendingString:urlString];
     NSString * token = [[NSUserDefaults standardUserDefaults]objectForKey:@"token"];
@@ -367,7 +466,7 @@ error   :
         
 //        NSNotificationCenter
 //        [self.delegate addFavouriteCallBack:responseData];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadFavouriteTableView" object:nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadFavourite" object:nil];
 
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         NSLog(@"%@",error);
@@ -384,9 +483,8 @@ error   :
  msg  : OK
  }
  
- error   :
- */
-- (void)removeFavourite:(long)questionId{
+ error   :- (void)addFavourite:(long)questionId DTZSuccessBlock:(DTZSuccessBlock)dtzSuccessBlock DTZFailBlock:(DTZFailBlock)dtzFailBlock; */
+- (void)removeFavourite:(long)questionId DTZSuccessBlock:(DTZSuccessBlock)dtzSuccessBlock DTZFailBlock:(DTZFailBlock)dtzFailBlock{
     NSString * urlString = @"/question/removeCollect";
     urlString = [url stringByAppendingString:urlString];
     NSString * token = [[NSUserDefaults standardUserDefaults]objectForKey:@"token"];
@@ -398,11 +496,10 @@ error   :
     [userDictionary setObject:questionIdNumber forKey:@"questionId"];
     [self.networkingManager POST:urlString parameters:userDictionary success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadFavouriteTableView" object:nil];
-
+        dtzSuccessBlock(responseData);
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadFavourite" object:nil];
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-        
+//        dtzFailBlock(error);
     }];
 }
 
@@ -433,15 +530,11 @@ error   :
         NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"%@",responseData);
         
-//        _cManager = [[CacheManager alloc]init];
-//        _cManager.kvs = [[YTKKeyValueStore alloc]initDBWithName:@"SUBCOURSEDB"];
         [_cManager saveFavourite:responseData];
-//        [self.delegate getallFavouriteCallBack:responseData];
-        
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadFavouriteTableView" object:nil];
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-        
+        NSLog(@"%@",error);
+        [MBProgressHUD showError:@"服务器故障"];
     }];
 }
 
@@ -479,6 +572,7 @@ error   :
         
     }];
 }
+
 /*
 request :   POST    /question/removequiz
 
@@ -486,9 +580,8 @@ params  :   {questionId : question的id}
 
 success :   {
     code : 200
-    msg  : OK
 }
-
+ 
 error   :
 */
 - (void)removequiz:(int)questionId {
@@ -508,6 +601,7 @@ error   :
         
     }];
 }
+
 /*
 request :   GET /question/quizs
 
@@ -537,6 +631,74 @@ error   :
         [self.delegate getallQuizCallBack:responseData];
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         
-    }];}
+    }];
+}
+
+//获取指定标签，时间试卷
+//
+//request :   GET     /paper/getPaperAfter
+//
+//params  :   { createTime : [Long] ， tag : [String，多个tag可用（,）号隔开] }
+//
+//success :   {
+//    code    : 200
+//    msg     : OK
+//    synTime : [Long]
+//    paperList : [paperModel 数组。  paper包含多个part,part包含多个quesiong]
+//}
+//
+//error   :
+- (void)getNewPaper {
+    NSString * urlString = @"/paper/getPaperAfter";
+    urlString = [url stringByAppendingString:urlString];
+    NSMutableDictionary * params = [[NSMutableDictionary alloc]init];
+    [params setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"token"] forKey:@"token"];
+    [params setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"] forKey:@"userId"];
+    NSNumber * createTime = [[NSUserDefaults standardUserDefaults] objectForKey:@"createTime"];
+    if (createTime != nil) {
+        [params setObject:createTime forKey:@"createTime"];
+    }
+
+    [self.networkingManager GET:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",responseData);
+        [[NSUserDefaults standardUserDefaults]setObject:[responseData objectForKey:@"synTime"] forKey:@"createTime"];
+        _cManager = [CacheManager sharedInstance];
+        if ([responseData objectForKey:@""] != nil) {
+            [_cManager savePaperIntoDB:responseData];
+        }
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"refreshNewPaper" object:nil];
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+//request :   POST    /paper/scan
+//
+//params  :   {url : [url]}
+//
+//success :   {
+//    code : 200
+//    msg  : {paper : [paperModel]}
+//}
+//
+//error   :
+- (void)paperScan:(NSString *)qrUrl {
+    NSString * urlString = @"/paper/scan";
+    urlString = [url stringByAppendingString:urlString];
+    NSMutableDictionary * params = [[NSMutableDictionary alloc]init];
+    [params setObject:qrUrl forKey:@"url"];
+    [self.networkingManager POST:urlString parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        NSDictionary * responseData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSNumber * code = [responseData objectForKey:@"code"];
+        if (code.longValue == 200) {
+        _cManager = [CacheManager sharedInstance];
+        NSMutableDictionary * paperDictionary = [responseData objectForKey:@"paper"];
+        [_cManager saveQRPaperIntoDB:paperDictionary];
+        }
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        NSLog(@"%@",error);
+    }];
+}
 
 @end

@@ -10,9 +10,13 @@
 #import "SlideViewCell.h"
 #import "StyleConstant.h"
 #import "UIImageView+WebCache.h"
+#import "SubcourseManager.h"
+#import "AboutCllassVC.h"
 
 
-@interface SCSlideNavigationController ()<UITableViewDataSource,UITableViewDelegate>
+@interface SCSlideNavigationController ()<UITableViewDataSource,UITableViewDelegate,SubcourseManagerDelegate,UIAlertViewDelegate> {
+    SubcourseManager * _scManager;
+}
 
 @end
 
@@ -21,10 +25,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(uploadAvatarUrl) name:@"UploadAvatarUrl" object:nil];
+    [self setupSubcourseManager];
     [self initArray];
     self.slideView.dataSource = self;
     self.slideView.delegate = self;
-    self.slideView.scrollEnabled = YES;
+    self.slideView.scrollEnabled = NO;
     self.slideView.separatorStyle = UITableViewCellSeparatorStyleNone;
     UIView * separatorLine = [[UIView alloc]initWithFrame:CGRectMake(self.slideView.frame.size.width * SLIDE_VIEW_WIDTH - 2, 0, 2, self.view.frame.size.height)];
     separatorLine.backgroundColor = [UIColor blackColor];
@@ -43,10 +48,7 @@
     self.titleArray = [[NSMutableArray alloc]init];
     NSString * title1 = @"资 料 库";
     NSString * title2 = @"我的收藏";
-    NSString * title3 = @"设  置";
-//    NSString * title4 = @"设  置";
-//    NSString * title5 = @"发现";
-//    NSString * title6 = @"注销";
+    NSString * title3 = @"关  于";
     
     self.titleArray = [[NSMutableArray alloc]initWithObjects:title1,title2,title3, nil];
 }
@@ -54,7 +56,7 @@
 #pragma mark - tableview datasource && delegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -87,6 +89,7 @@
     }else {
         UILabel * titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, self.slideView.frame.size.width * SLIDE_VIEW_WIDTH, 20)];
         titleLabel.text = @"注  销";
+        titleLabel.textColor = [UIColor blackColor];
         titleLabel.textAlignment = UITextAlignmentCenter;
         UIView * separatorLine = [[UIView alloc]initWithFrame:CGRectMake(0, 42, self.slideView.frame.size.width * SLIDE_VIEW_WIDTH, 2)];
         separatorLine.backgroundColor = [UIColor blackColor];
@@ -108,25 +111,24 @@
     if (section == 0) {
         UIView * headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 260, 240)];
         //设置icon
-//        UIButton * iconBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.slideView.frame.size.width * SLIDE_VIEW_WIDTH / 2 - 40, 70, 80, 80)];
         UIImageView * iconImageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.slideView.frame.size.width * SLIDE_VIEW_WIDTH / 2 - 40, 70, 80, 80)];
-
         iconImageView.layer.masksToBounds = YES;
         iconImageView.layer.cornerRadius = 40;
         iconImageView.userInteractionEnabled = YES;
-//        personalAvatarCell.avatarImageView.layer.masksToBounds = YES;
-//        personalAvatarCell.avatarImageView.layer.cornerRadius = 50;
         if ([[NSUserDefaults standardUserDefaults]objectForKey:@"avatar"] != nil) {
             NSString * imageURL = [[NSUserDefaults standardUserDefaults]objectForKey:@"avatar"];
             NSURL * url = [NSURL URLWithString:imageURL];
             [iconImageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"Oval"]];
+        }else {
+            iconImageView.image = [UIImage imageNamed:@"Oval"];
         }
         //设置icon 下面的label
         UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake( 0,  160, self.slideView.frame.size.width * SLIDE_VIEW_WIDTH, 40)];
         label.font = [UIFont systemFontOfSize:20];
         label.textColor = [UIColor blackColor];
         if ([[NSUserDefaults standardUserDefaults] objectForKey:@"phone"] != nil) {
-            label.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"phone"];
+//            label.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"phone"];
+            label.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"nickName"];
         }
 //        label.text = @"用户学号";
         label.textAlignment = UITextAlignmentCenter;
@@ -150,8 +152,43 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    [self showItemAtIndex:indexPath withAnimation:YES];
+//    [self.slideDelegate searchControllerRF];
+    UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+    [cell setSelected:NO];
+    if (indexPath.section == 1) {
+        [self logoutAction];
+    }
+    else {
+        if (indexPath.row == 0) {
+//            [[NSNotificationCenter defaultCenter]postNotificationName:@"firstSearchBar" object:nil];
+        }else if (indexPath.row == 1) {
+//            [[NSNotificationCenter defaultCenter]postNotificationName:@"secondSearchBar" object:nil];
+        }
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        [self showItemAtIndex:indexPath withAnimation:YES];
+    }
+}
+
+#pragma mark - subcourseManager settings && delegate 
+
+- (void)setupSubcourseManager {
+    _scManager = [SubcourseManager sharedInstance];
+    _scManager.delegate = self;
+}
+
+- (void)logoutAction {
+    UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"确定注销？" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alert.delegate = self;
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        NSLog(@"取消");
+    }else if (buttonIndex == 1){
+        
+        [_scManager userLogout];
+    }
 }
 
 - (void)clickIcon {

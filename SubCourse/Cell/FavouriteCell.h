@@ -14,4 +14,7 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *questionTitleLabel;
 
+@property (strong, nonatomic) IBOutlet UILabel *partTitleLabel;
+
+
 @end

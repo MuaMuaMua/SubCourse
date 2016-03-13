@@ -76,7 +76,7 @@
             CGPoint old = [change[@"old"] CGPointValue];
             CGPoint new = [change[@"new"] CGPointValue];
             if (new.y <= old.y) return;
-            
+            _scrollView.backgroundColor = [UIColor whiteColor];
             // 当底部刷新控件完全出现时，才刷新
             [self beginRefreshing];
         }
@@ -93,10 +93,12 @@
         if (_scrollView.mj_insetT + _scrollView.mj_contentH <= _scrollView.mj_h) {  // 不够一个屏幕
             if (_scrollView.mj_offsetY >= - _scrollView.mj_insetT) { // 向上拽
                 [self beginRefreshing];
+                _scrollView.backgroundColor = [UIColor whiteColor];
             }
         } else { // 超出一个屏幕
             if (_scrollView.mj_offsetY >= _scrollView.mj_contentH + _scrollView.mj_insetB - _scrollView.mj_h) {
                 [self beginRefreshing];
+                _scrollView.backgroundColor = [UIColor whiteColor];
             }
         }
     }

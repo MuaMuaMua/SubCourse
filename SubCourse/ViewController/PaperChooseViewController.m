@@ -14,13 +14,16 @@
 #import "PaperModel.h"
 #import "PartModel.h"
 #import "QuestionModel.h"
+#import "SubcourseManager.h"
 
-@interface PaperChooseViewController ()<UITableViewDataSource,UITableViewDelegate,SubcourseManagerDelegate>{
+@interface PaperChooseViewController ()<UITableViewDataSource,UITableViewDelegate,SubcourseManagerDelegate,UIAlertViewDelegate>{
     IBOutlet UITableView *_tableView;
     NSDictionary * _paperDictionary;
     NSArray * paperList;
     int _pageNum;
     IBOutlet UINavigationItem *_navigationItem;
+    int indexForQuestionModel;
+    SubcourseManager * _scManager;
 }
 
 @end
@@ -29,20 +32,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     [self.continueBtn setWidth:0];
-//    self.continueBtn.title = @""
+    self.title = _paperModel.title;
+    UILabel * label = [[UILabel alloc]init];
+    label.text = _paperModel.title;
+    QuestionModel * questionModel = [_paperModel.qmList objectAtIndex:indexForQuestionModel];
+    label.text = questionModel.paperTitle;
+    [label sizeToFit];
+    label.textColor = [UIColor blackColor];
+    _navigationItem.titleView = label;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self setTableView];
-    self.view.backgroundColor = [UIColor colorWithRed:18.0/255 green:18.0/255 blue:18.0/255 alpha:1];
-    self.title = _paperModel.title;
-    UILabel * label = [[UILabel alloc]init];
-    label.text = _paperModel.title;
-    [label sizeToFit];
-    label.textColor = [UIColor whiteColor];
-    _navigationItem.titleView = label;
+//    self.view.backgroundColor = [UIColor colorWithRed:18.0/255 green:18.0/255 blue:18.0/255 alpha:1];
+    
+}
+
+#pragma mark - SubcourseManager delegate && datasource
+
+- (void)setupSCManager {
+    _scManager = [SubcourseManager sharedInstance];
+    _scManager.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -61,14 +72,13 @@
 
 - (void)setTableView {
     _pageNum = 1;
-    _tableView.backgroundColor = [UIColor colorWithRed:18.0/255 green:18.0/255 blue:18.0/255 alpha:1];
+//    _tableView.backgroundColor = [UIColor colorWithRed:18.0/255 green:18.0/255 blue:18.0/255 alpha:1];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorColor = [UIColor clearColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _navaigationBar.barTintColor = [UIColor colorWithRed:18.0/255 green:18.0/255 blue:18.0/255 alpha:1];
-//    _navaigationBar.backgroundColor = [UIColor colorWithRed:18.0/255 green:18.0/255 blue:18.0/255 alpha:1];
-    _navaigationBar.tintColor = [UIColor colorWithRed:18.0/255 green:18.0/255 blue:18.0/255 alpha:1];
+//    _navaigationBar.barTintColor = [UIColor whiteColor];
+
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -111,6 +121,7 @@
             QuestionModel * questionModel = [partModel.qmList objectAtIndex:indexPath.row - 1];
             NSString * string = [NSString stringWithFormat:@"第%ld小题",(long)indexPath.row];
             pageCell.pageTitleLabel.text = string;
+            pageCell.countLabel.hidden = YES;
             _pageNum ++;
             return pageCell;
             }
@@ -135,6 +146,20 @@
         return;
     }else {
         [self.delegate clickCategoryPage:indexPath];
+    }
+}
+
+- (void)logoutAction:(id)sender {
+    UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"确定注销？" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alert.delegate = self;
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        NSLog(@"取消");
+    }else if (buttonIndex == 1){
+        [_scManager userLogout];
     }
 }
 

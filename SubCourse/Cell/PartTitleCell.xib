@@ -11,7 +11,7 @@
             <rect key="frame" x="0.0" y="0.0" width="456" height="81"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="456" height="81"/>
+                <rect key="frame" x="0.0" y="0.0" width="456" height="80.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="关于版本控制" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AP9-uN-rnV">
@@ -22,7 +22,7 @@
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k3X-RP-BmI" userLabel="SeparatorLine">
                         <rect key="frame" x="20" y="80" width="416" height="1"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="MwZ-L3-lrA"/>
                         </constraints>
@@ -39,7 +39,7 @@
             <connections>
                 <outlet property="partLabel" destination="AP9-uN-rnV" id="QBs-XM-zBT"/>
             </connections>
-            <point key="canvasLocation" x="50" y="268.5"/>
+            <point key="canvasLocation" x="49" y="265.5"/>
         </tableViewCell>
     </objects>
 </document>

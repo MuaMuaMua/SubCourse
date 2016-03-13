@@ -20,4 +20,8 @@
     // Configure the view for the selected state
 }
 
+//- (void)layoutSubviews {
+////    self.contentLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:13];
+//}
+
 @end

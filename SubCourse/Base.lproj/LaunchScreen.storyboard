@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SubCourseIcon" translatesAutoresizingMaskIntoConstraints="NO" id="8p6-CR-MZ8">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SubcourseIC" translatesAutoresizingMaskIntoConstraints="NO" id="8p6-CR-MZ8">
                                 <rect key="frame" x="200" y="200" width="200" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="iRE-iN-axP"/>
@@ -38,6 +38,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="SubCourseIcon" width="1024" height="1024"/>
+        <image name="SubcourseIC" width="1024" height="1024"/>
     </resources>
 </document>

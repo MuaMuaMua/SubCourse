@@ -22,9 +22,9 @@
 
 - (void)layoutSubviews {
 //    self.contentView.backgroundColor = [UIColor colorWithRed:18.0/255 green:18.0/255 blue:18.0/255 alpha:1];
-    self.pageTitleLabel.textColor = [UIColor whiteColor];
-    self.countLabel.textColor = [UIColor whiteColor];
-    self.backgroundColor = [UIColor clearColor];
+    self.pageTitleLabel.textColor = [UIColor blackColor];
+    self.countLabel.textColor = [UIColor blackColor];
+//    self.backgroundColor = [UIColor clearColor];
 }
 
 @end

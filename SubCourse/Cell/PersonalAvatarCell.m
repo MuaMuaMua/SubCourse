@@ -20,8 +20,4 @@
     // Configure the view for the selected state
 }
 
-- (void)layoutSubviews {
-    self.avatarImageView.layer.cornerRadius = 50;
-}
-
 @end

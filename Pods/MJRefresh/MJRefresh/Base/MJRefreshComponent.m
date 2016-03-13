@@ -13,7 +13,6 @@
 #import "UIScrollView+MJRefresh.h"
 
 @interface MJRefreshComponent()
-@property (strong, nonatomic) UIPanGestureRecognizer *pan;
 @end
 
 @implementation MJRefreshComponent

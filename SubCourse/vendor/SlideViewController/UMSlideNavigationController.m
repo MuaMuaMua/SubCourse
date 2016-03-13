@@ -25,6 +25,8 @@
 
 @interface UMSlideNavigationController ()<UIGestureRecognizerDelegate>
 
+@property BOOL isSearchingDTZ;
+
 // 可以滑动的View
 @property (strong, nonatomic)   UIView            *contentView;
 // 标记ContentView的静止状态left
@@ -32,6 +34,8 @@
 // 标记滑动状态
 @property (assign, nonatomic)   BOOL              moving;
 @property (strong,nonatomic) UIPanGestureRecognizer *panRecognizer;
+
+@property int isDeleting;
 
 // 动画
 - (void)moveContentViewTo:(CGPoint)toPoint WithPath:(UIBezierPath *)path inDuration:(CGFloat)duration;
@@ -60,6 +64,8 @@
 - (void)addPanRecognizer
 {
     self.panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(slidePanAction:)];
+//    self.panRecognizer.edges = UIRectEdgeAll;
+//    [self.view addGestureRecognizer:self.panRecognizer];
     [self.contentView addGestureRecognizer:self.panRecognizer];
     self.left = self.contentView.left;
 }
@@ -73,6 +79,9 @@
 //最终移动方法
 - (void)moveContentViewTo:(CGPoint)toPoint WithPath:(UIBezierPath *)path inDuration:(CGFloat)duration
 {
+    if (self.isSearchingDTZ) {
+        return;
+    }
     self.contentView.layer.anchorPoint = CGPointZero;
     self.contentView.layer.frame = CGRectMake(toPoint.x, toPoint.y, self.contentView.width, self.contentView.height);
     CAKeyframeAnimation *pathAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
@@ -102,10 +111,17 @@
         //move in
     }
     self.moving = NO;
+//    [[NSNotificationCenter defaultCenter]postNotificationName:@"resignSearchBar" object:nil];
 }
 
 - (void)slideButtonClicked //Hamburger
 {
+    
+    if (self.isSearchingDTZ) {
+        return;
+    }
+//    [[NSNotificationCenter defaultCenter]postNotificationName:@"resignSearchBar" object:nil];
+    
     [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
     //NSLog(@"UMSlideNavigationController");
     UIBezierPath *path = [UIBezierPath bezierPath];
@@ -130,13 +146,30 @@
 //草距个手势识别
 -(BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldReceiveTouch:(UITouch*)touch {
     [touch.view becomeFirstResponder];
-    //NSLog(@"view class:%@ view.tag:%ld",[touch.view class],touch.view.tag);//UITableViewCellContentView
+    
+    CGPoint point = [touch locationInView:touch.view];
+    
     if (touch.view.tag == 9 || [touch.view isKindOfClass:[UITableViewCell class]]) {
         return NO;
-    }else
-        return YES;
+    }
     
+    if (point.x >= 50) {
+        return NO;
+    }
+    
+    if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+        return YES;
+    }
+    return YES;
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+        return NO;
+    }
+    return YES;
+}
+
 
 // 延迟运行
 - (void)slideNavigatorDidDisappear
@@ -149,8 +182,12 @@
     [self viewDidAppear:YES];
 }
 
-- (void)slidePanAction:(UIPanGestureRecognizer *)recognizer
+- (void)slidePanAction:(UIScreenEdgePanGestureRecognizer *)recognizer
 {
+    
+    if ( self.isSearchingDTZ) {
+        return;
+    }
     CGPoint translation = [recognizer translationInView:self.contentView];
     CGPoint velocity = [recognizer velocityInView:self.contentView];
     if(recognizer.state == UIGestureRecognizerStateChanged && 2 <= ABS(self.left - ABS(translation.x))) { // sliding.
@@ -265,6 +302,11 @@
 //用户点击了选项
 - (void)showItemAtIndex:(NSIndexPath *)index withAnimation:(BOOL)animated
 {
+    
+    if (self.isSearchingDTZ) {
+        return;
+    }
+    
     if (animated) {//move in
         if (index.section < [self.items count] && index.row < [self.items[index.section] count]) {
             self.currentIndex = index;
@@ -296,11 +338,25 @@
     
 }
 
+- (void)searchingDTZ:(NSNotification *)notification {
+    NSMutableDictionary * dictionary = [notification object];
+    NSString * string = [dictionary objectForKey:@"key"];
+    if ([string isEqualToString:@"1"]) {
+        self.isSearchingDTZ = NO;
+    }else {
+        self.isSearchingDTZ = YES;
+    }
+}
+
 #pragma mark
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.isSearchingDTZ = NO;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchingDTZ:) name:@"searchingDTZ" object:nil];
     
     self.navItem = [[UINavigationItem alloc] initWithTitle:@""];
     self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.width, self.view.height)];

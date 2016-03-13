@@ -16,6 +16,7 @@
 #import <QiniuSDK.h>
 #import "SubcourseManager.h"
 #import "UIImageView+WebCache.h"
+#import "PasswordSettingControllerViewController.h"
 
 @interface SafetySettingController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,SubcourseManagerDelegate> {
     UIImagePickerController * _picker;
@@ -40,6 +41,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    [self initTitleArray];
+    [self.rightBtn.customView setHidden:YES];
+    [self.rightBtn setEnabled:NO];
     [self initSubcourseManager];
     self.view.backgroundColor = [UIColor greenColor];
 
@@ -72,7 +75,9 @@
 - (void)initTableView {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.showsHorizontalScrollIndicator = NO;
+    self.tableView.showsVerticalScrollIndicator = NO;
+//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.title = @"我的资料";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshIcon) name:@"RefreshIcon" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshInfo) name:@"RefreshInfo" object:nil];
@@ -114,16 +119,10 @@
 
     self.titleArray = [[NSMutableArray alloc]initWithObjects:array1,array2,array3, nil];
     
-    
-//    NSString * nicknameString = [[NSUserDefaults standardUserDefaults] objectForKey:@"nickname"];
-//    NSString * studentNo = [[NSUserDefaults standardUserDefaults] objectForKey:@"studentNo"];
-//    NSString * school = [[NSUserDefaults standardUserDefaults] objectForKey:@"school"];
-//    NSString * clazz = [[NSUserDefaults standardUserDefaults] objectForKey:@"clazz"];
-//    NSString *
-    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (indexPath.row == 0 && indexPath.section == 0) {
         UIActionSheet *myActionSheet;
         myActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"相册", @"拍照", nil];
@@ -196,6 +195,9 @@
                 }
                 [self presentViewController:updatePersonalInfo animated:YES completion:nil];
             }
+        }else if(indexPath.section == 3) {
+            PasswordSettingControllerViewController * pscvc = [[PasswordSettingControllerViewController alloc]init];
+            [self.navigationController pushViewController:pscvc animated:YES];
         }
     }
 }
@@ -214,7 +216,9 @@
             _picker.sourceType = UIImagePickerControllerSourceTypeCamera;
             _picker.delegate = self;
             _picker.allowsEditing = YES;
+//            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
             [self presentViewController:_picker animated:YES completion:nil];
+//            }
             break;
         default:
             break;
@@ -234,7 +238,6 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     
-    
     _pickImage = [info objectForKey:@"UIImagePickerControllerEditedImage"];
 
     NSData * imageData = UIImageJPEGRepresentation(_pickImage, 1);
@@ -253,7 +256,7 @@
     
     UINib * nib2 = [UINib nibWithNibName:@"InfoCell" bundle:nil];
     static NSString * certif = @"MyProfileSettingCell";
-    certif = [certif stringByAppendingString:[NSString stringWithFormat:@"%ld",(long)indexPath.row]];
+//    certif = [certif stringByAppendingString:[NSString stringWithFormat:@"%ld",(long)indexPath.row]];
     [tableView registerNib:nib2 forCellReuseIdentifier:certif];
     
     //第一行第一列返回 avatarCell
@@ -270,9 +273,10 @@
         }
         personalAvatarCell.avatarImageView.layer.masksToBounds = YES;
         personalAvatarCell.avatarImageView.layer.cornerRadius = 50;
+        personalAvatarCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         UIView * separatorLine = [[UIView alloc]initWithFrame:CGRectMake(20, 139, self.view.frame.size.width, 1)];
         separatorLine.backgroundColor = [UIColor colorWithRed:211.0/255 green:211.0/255 blue:211.0/255 alpha:1];
-        [personalAvatarCell.contentView addSubview:separatorLine];
+        [personalAvatarCell setSelected:NO];
         return personalAvatarCell;
     }else {
         // 返回各种持有对象的cell
@@ -286,7 +290,7 @@
             _nicknameCell.titleLabel.text = @"昵称";
             _nicknameCell.contentLabel.text = _nickname;
             _nicknameCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            [_nicknameCell.contentView addSubview:separatorLine];
+            [_nicknameCell setSelected:NO];
             return _nicknameCell;
         }else if (indexPath.row == 2 && indexPath.section == 0) {
             InfoCell * _studentNoCell = [tableView dequeueReusableCellWithIdentifier:certif];
@@ -295,6 +299,7 @@
             }
             _studentNoCell.titleLabel.text = @"学号";
             _studentNoCell.contentLabel.text = _studentNo;
+            [_studentNoCell setSelected:NO];
             return _studentNoCell;
         }else if (indexPath.row == 0 && indexPath.section == 1) {
             InfoCell * _schoolCell = [tableView dequeueReusableCellWithIdentifier:certif];
@@ -305,7 +310,7 @@
             separatorLine.backgroundColor = [UIColor colorWithRed:211.0/255 green:211.0/255 blue:211.0/255 alpha:1];
             _schoolCell.titleLabel.text = @"学校";
             _schoolCell.contentLabel.text = _school;
-            [_schoolCell.contentView addSubview:separatorLine];
+            [_schoolCell setSelected:NO];
             return _schoolCell;
         }else if (indexPath.row == 1 && indexPath.section == 1) {
             InfoCell * _clazzCell = [tableView dequeueReusableCellWithIdentifier:certif];
@@ -314,6 +319,7 @@
             }
             _clazzCell.titleLabel.text = @"班级";
             _clazzCell.contentLabel.text = _clazz;
+            [_clazzCell setSelected:NO];
             return _clazzCell;
         }else if (indexPath.row == 0 && indexPath.section == 2) {
             InfoCell * _realNameCell = [tableView dequeueReusableCellWithIdentifier:certif];
@@ -324,7 +330,7 @@
             separatorLine.backgroundColor = [UIColor colorWithRed:211.0/255 green:211.0/255 blue:211.0/255 alpha:1];
             _realNameCell.titleLabel.text = @"真实姓名";
             _realNameCell.contentLabel.text = _realName;
-            [_realNameCell.contentView addSubview:separatorLine];
+            [_realNameCell setSelected:NO];
             return _realNameCell;
         }else if(indexPath.row == 1 && indexPath.section == 2) {
             InfoCell * _idCardCell = [tableView dequeueReusableCellWithIdentifier:certif];
@@ -335,7 +341,6 @@
             separatorLine.backgroundColor = [UIColor colorWithRed:211.0/255 green:211.0/255 blue:211.0/255 alpha:1];
             _idCardCell.titleLabel.text = @"证件号码";
             _idCardCell.contentLabel.text = _idCard;
-            [_idCardCell.contentView addSubview:separatorLine];
             return _idCardCell;
         }else if(indexPath.row == 2 && indexPath.section == 2) {
             InfoCell * _phoneCell = [tableView dequeueReusableCellWithIdentifier:certif];
@@ -346,7 +351,7 @@
             separatorLine.backgroundColor = [UIColor colorWithRed:211.0/255 green:211.0/255 blue:211.0/255 alpha:1];
             _phoneCell.titleLabel.text = @"手机";
             _phoneCell.contentLabel.text = _phone;
-            [_phoneCell.contentView addSubview:separatorLine];
+            [_phoneCell setSelected:NO];
             return _phoneCell;
         }else if(indexPath.row == 3 && indexPath.section == 2) {
             InfoCell * _emailCell = [tableView dequeueReusableCellWithIdentifier:certif];
@@ -357,7 +362,7 @@
             separatorLine.backgroundColor = [UIColor colorWithRed:211.0/255 green:211.0/255 blue:211.0/255 alpha:1];
             _emailCell.titleLabel.text = @"邮箱地址";
             _emailCell.contentLabel.text = _email;
-            [_emailCell.contentView addSubview:separatorLine];
+            [_emailCell setSelected:NO];
             return _emailCell;
         }else if(indexPath.row == 4 && indexPath.section == 2) {
             InfoCell * _addressCell = [tableView dequeueReusableCellWithIdentifier:certif];
@@ -366,7 +371,17 @@
             }
             _addressCell.titleLabel.text = @"地址";
             _addressCell.contentLabel.text = _address;
+            [_addressCell setSelected:NO];
             return _addressCell;
+        }else if(indexPath.section == 3) {
+            InfoCell * passwordCell = [tableView dequeueReusableCellWithIdentifier:certif];
+            if (passwordCell == nil) {
+                passwordCell = [[InfoCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:certif];
+            }
+            passwordCell.titleLabel.text = @"密码设置";
+            passwordCell.contentLabel.text = @"";
+            [passwordCell setSelected:NO];
+            return passwordCell;
         }
     }
     return  nil;
@@ -379,12 +394,14 @@
         return 2;
     }else if(section == 2){
         return 5;
+    }else  {
+        return 1;
     }
     return 0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 - (CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -404,26 +421,24 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     //根据设计图  分为三个 section 每个section的view的高度都不同
     if (section == 0) {
-        return 0;
-    }else if (section == 1){
-        return 30;
+        return 1;
     }else {
-        return 30;
+        return 10;
     }
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView * headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
-    //设置分割线
-    UIView * separatorLine1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
-    separatorLine1.backgroundColor = [UIColor grayColor];
-    
-    UIView * separatorLine2 = [[UIView alloc]initWithFrame:CGRectMake(0, 29, self.view.frame.size.width, 1)];
-    separatorLine2.backgroundColor = [UIColor blackColor];
-    [headView addSubview:separatorLine2];
-    [headView addSubview:separatorLine1];
-    return headView;
-}
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    UIView * headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
+//    //设置分割线
+//    UIView * separatorLine1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
+//    separatorLine1.backgroundColor = [UIColor grayColor];
+//    
+//    UIView * separatorLine2 = [[UIView alloc]initWithFrame:CGRectMake(0, 29, self.view.frame.size.width, 1)];
+//    separatorLine2.backgroundColor = [UIColor blackColor];
+//    [headView addSubview:separatorLine2];
+//    [headView addSubview:separatorLine1];
+//    return headView;
+//}
 
 
 @end

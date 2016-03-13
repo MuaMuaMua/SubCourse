@@ -10,6 +10,4 @@
 
 @interface ScanQRCodeViewController : UIViewController
 
-
-
 @end

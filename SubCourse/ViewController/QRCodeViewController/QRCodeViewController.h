@@ -7,7 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
+
+@protocol QRCodeVCDelegate <NSObject>
+
+- (void)qrBackToList;
+
+@end
 
 @interface QRCodeViewController : UIViewController
 
+@property (strong, nonatomic) AVCaptureDevice            *defaultDevice;
+@property (strong, nonatomic) AVCaptureDeviceInput       *defaultDeviceInput;
+@property (strong, nonatomic) AVCaptureDevice            *frontDevice;
+@property (strong, nonatomic) AVCaptureDeviceInput       *frontDeviceInput;
+@property (strong, nonatomic) AVCaptureMetadataOutput    *metadataOutput;
+@property (strong, nonatomic) AVCaptureSession           *session;
+@property (strong, nonatomic) AVCaptureVideoPreviewLayer *previewLayer;
+
+@property (strong, nonatomic) id<QRCodeVCDelegate> qrDelegate;
 @end

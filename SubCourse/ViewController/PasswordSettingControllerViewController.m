@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "YTKKeyValueStore.h"
 #import "CacheManager.h"
+#import "CLLASSTextField.h"
 
 #define newPaperTablename @"newPaperTablename"
 #define newQuestionTable @"questionTablename"
@@ -27,11 +28,11 @@
     
     IBOutlet UILabel *_nicknameLabel;
     
-    IBOutlet UITextField *_originalPasswordField;
+    IBOutlet CLLASSTextField *_originalPasswordField;
     
-    IBOutlet UITextField *_newPasswordField;
+    IBOutlet CLLASSTextField *_newPasswordField;
     
-    IBOutlet UITextField *_newPasswordComfirmField;
+    IBOutlet CLLASSTextField *_newPasswordComfirmField;
     
     SubcourseManager * _scManager;
     
@@ -55,17 +56,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self subcourseManagerSetting];
-    
+//    [self setLeftViewForTextField];
+    //去掉扫码部分的icon
+//    [self.rightBtn.customView setHidden:YES];
+//    [self.rightBtn setEnabled:NO];
     //初始化 titleBtn
     UIButton * titleBtn = [[UIButton alloc] init];
-    [titleBtn setTitle:@"安全设置" forState:UIControlStateNormal];
+    [titleBtn setTitle:@"密码设置" forState:UIControlStateNormal];
     titleBtn.backgroundColor = [UIColor blueColor];
     [titleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [titleBtn setImage:[UIImage imageNamed:@"dd"] forState:UIControlStateNormal];
     self.navigationController.navigationBar.translucent = NO;
     self.navigationItem.titleView = titleBtn;
     
-    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"nickname"]!=nil) {
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"nickName"]!=nil) {
         _nicknameLabel.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"nickName"];
     }
 }
@@ -78,6 +84,19 @@
     
 }
 
+#pragma mark - setTextFieldsLeftViews
+
+- (void)setLeftViewForTextField {
+//    UIView * leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 20, 50)];
+//    _originalPasswordField.leftViewMode = UITextFieldViewModeAlways;
+//    _newPasswordComfirmField.leftViewMode = UITextFieldViewModeAlways;
+//    _newPasswordField.leftViewMode = UITextFieldViewModeAlways;
+//    _originalPasswordField.leftViewMode = UITextFieldViewModeAlways;
+//    _originalPasswordField.leftView = leftView;
+//    _newPasswordField.leftView = leftView;
+//    _newPasswordComfirmField.leftView = leftView;
+}
+
 #pragma mark - subcourse delegate && settings 
 
 - (void)subcourseManagerSetting {
@@ -87,6 +106,7 @@
 }
 
 - (void)userLogoutCallBack:(NSDictionary *)responseData {
+    [self subcourseManagerSetting];
     [_cManager.kvs clearTable:newFavouriteListTable];
     [_cManager.kvs clearTable:newPaperTablename];
     [_cManager.kvs clearTable:newQuestionTable];

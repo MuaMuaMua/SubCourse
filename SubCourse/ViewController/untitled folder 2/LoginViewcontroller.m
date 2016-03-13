@@ -51,7 +51,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self managerSettings];
+//    [self managerSettings];
+//    _signupBtn.hidden = YES;
+    _forgetBtn.hidden = YES;
     self.navigationController.navigationBar.hidden = YES;
 }
 
@@ -62,6 +64,10 @@
 
 #pragma mark - subcourseManager && cacheManager delegate && settings 
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self managerSettings];
+}
+
 - (void)managerSettings {
     _scManager = [SubcourseManager sharedInstance];
     _cManager = [CacheManager sharedInstance];
@@ -69,11 +75,15 @@
 }
 
 - (void)userLoginCallBack:(NSDictionary *)responseData {
+    [self managerSettings];
+    [_cManager.kvs clearTable:newFavouriteListTable];
+    [_cManager.kvs clearTable:newPaperTablename];
+    [_cManager.kvs clearTable:newQuestionTable];
+    [_cManager.kvs clearTable:favouriteTabel];
     NSNumber * callBackCode = (NSNumber *)[responseData objectForKey:@"code"];
     if (callBackCode.intValue == 405) {
         [MBProgressHUD showError:@"手机号码或者密码出错"];
     }else {
-//        NSString * phoneNumber = responseData
         NSDictionary * userDictionary = [responseData objectForKey:@"user"];
         NSString * phoneNumber = _studentField.text;
         [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:@"loginPhoneNumber"];
@@ -94,35 +104,13 @@
         [[NSUserDefaults standardUserDefaults] setObject:[userDictionary objectForKey:@"clazz"] forKey:@"clazz"];
         [[NSUserDefaults standardUserDefaults] setObject:[userDictionary objectForKey:@"avatar"] forKey:@"avatar"];
         
-//#define newPaperTablename @"newPaperTablename"
-//#define newQuestionTable @"questionTablename"
-//#define favouriteTabel @"favouriteTable"
-//#define newFavouriteListTable @"newFavouriteListTable"
-        //_instance.kvs = [[YTKKeyValueStore alloc]initDBWithName:@"SubCourse"];
-//        _cManager.kvs = [[YTKKeyValueStore alloc]initWithDBWithPath:@"SubCource"];
-//#define tablename @"SCBasicInfo"
-//#define paperTablename @"paperTable"
-//        [_cManager.kvs clearTable:newPaperTablename];
-//        [_cManager.kvs clearTable:newQuestionTable];
-//        [_cManager.kvs clearTable:favouriteTabel];
-//        [_cManager.kvs clearTable:newFavouriteListTable];
-//        [_cManager.kvs clearTable:tablename];
-//        [_cManager.kvs clearTable:paperTablename];
         NSString * nickName = [[NSUserDefaults standardUserDefaults]objectForKey:@"nickName"];
         
-//        [_scManager getQiNiuToken];
         [MBProgressHUD hideHUD];
         [MBProgressHUD showSuccess:@"登陆成功!"];
         _appdelegate = [[UIApplication sharedApplication]delegate];
         [_appdelegate startEntry];
     }
-}
-
-- (void)getQiNiuCallBack:(NSDictionary *)responseData{
-    NSLog(@"%@",responseData);
-    [[NSUserDefaults standardUserDefaults] setObject:[responseData objectForKey:@"upToken"] forKey:@"QiNiuToken"];
-//    _appdelegate = [[UIApplication sharedApplication]delegate];
-//    [_appdelegate startEntry];
 }
 
 #pragma mark - textField delegate
@@ -164,8 +152,8 @@
 }
 
 - (IBAction)forgetAction:(id)sender {
-    _appdelegate = [[UIApplication sharedApplication]delegate];
-    [_appdelegate startEntry];
+//    _appdelegate = [[UIApplication sharedApplication]delegate];
+//    [_appdelegate startEntry];
 }
 
 
